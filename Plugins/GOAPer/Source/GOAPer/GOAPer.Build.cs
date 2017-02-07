@@ -12,7 +12,7 @@ public class GOAPer : ModuleRules
 	PrivateIncludePathModuleNames.AddRange(
 		new string[] {
 			"Settings",
-		}
+        }
 	);
 	
 	PrivateIncludePaths.AddRange(

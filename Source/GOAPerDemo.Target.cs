@@ -21,5 +21,10 @@ public class GOAPerDemoTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.AddRange( new string[] { "GOAPerDemo" } );
+		
+		if(UEBuildConfiguration.bBuildEditor)
+		{
+			OutExtraModuleNames.AddRange( new string[] { "GOAPerEditor" } );
+		}
 	}
 }

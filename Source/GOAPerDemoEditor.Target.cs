@@ -21,5 +21,6 @@ public class GOAPerDemoEditorTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.AddRange( new string[] { "GOAPerDemo" } );
+		OutExtraModuleNames.AddRange( new string[] { "GOAPerEditor" } );
 	}
 }
