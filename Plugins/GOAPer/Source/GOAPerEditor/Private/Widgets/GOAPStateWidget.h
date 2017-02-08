@@ -1,5 +1,5 @@
 #pragma once
-
+#include "GOAPAtom.h"
 #include "SlateBasics.h"
 
 class SGOAPStateWidget : public SCompoundWidget
@@ -8,15 +8,14 @@ public:
 	SLATE_BEGIN_ARGS(SGOAPStateWidget) {}
 	SLATE_END_ARGS()
 
-		void Construct(const FArguments& Args);
+	void Construct(const FArguments& Args);
+
 	FReply ButtonPressed();
 
-	/* Adds a new textbox with the string to the list */
-	TSharedRef<ITableRow> OnGenerateRowForList(TSharedPtr<FString> Item, const TSharedRef<STableViewBase>& OwnerTable);
+	TArray<TSharedPtr<FGOAPAtom>> Atoms;
 
-	/* The list of strings */
-	TArray<TSharedPtr<FString>> Items;
+	TSharedRef<ITableRow> OnGenerateRowForList(TSharedPtr<FGOAPAtom> Item, const TSharedRef<STableViewBase>& OwnerTable);
 
-	/* The actual UI list */
-	TSharedPtr< SListView< TSharedPtr<FString> > > ListViewWidget;
+	TSharedPtr<SListView<TSharedPtr<FGOAPAtom>>> AtomsWidget;
+	
 };
