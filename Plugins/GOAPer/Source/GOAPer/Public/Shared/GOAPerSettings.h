@@ -7,7 +7,7 @@
  * Implements the settings for the GOAPer Plugin
  */
 UCLASS(config=GOAPer, BlueprintType)
-class UGOAPerSettings
+class GOAPER_API UGOAPerSettings
 	: public UObject
 {
 	GENERATED_BODY()

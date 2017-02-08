@@ -1,5 +1,6 @@
 #include "GOAPerEditor.h"
 #include "GOAPStateCustomization.h"
+#include "../Widgets/GOAPStateWidget.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
 
@@ -35,9 +36,11 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 	.ValueContent()
 		.MinDesiredWidth(500)
 		[
-			SNew(STextBlock)
-			.Text(LOCTEXT("Extra info", "Some new representation"))
-		.Font(IDetailLayoutBuilder::GetDetailFont())
+			//SNew(STextBlock)
+			//.Text(LOCTEXT("Extra info", "Some new representation"))
+		//.Font(IDetailLayoutBuilder::GetDetailFont())
+			SNew(SGOAPStateWidget)
+			
 		];
 }
 
