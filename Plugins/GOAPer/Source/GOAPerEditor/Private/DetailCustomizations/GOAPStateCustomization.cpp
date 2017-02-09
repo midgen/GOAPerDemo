@@ -1,5 +1,6 @@
 #include "GOAPerEditor.h"
 #include "GOAPStateCustomization.h"
+#include "GOAPState.h"
 #include "../Widgets/GOAPStateWidget.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
@@ -23,25 +24,27 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 		{
 			SomeUPropertyHandle = ChildHandle;
 		}
+
+		check(SomeUPropertyHandle.IsValid());
+
+
+		HeaderRow.NameContent()
+			[
+				//StructPropertyHandle->CreatePropertyNameWidget(TEXT("New property header name"), false)
+				StructPropertyHandle->CreatePropertyNameWidget()
+			]
+		.ValueContent()
+			.MinDesiredWidth(500)
+			[
+				//SNew(STextBlock)
+				//.Text(LOCTEXT("Extra info", "Some new representation"))
+				//.Font(IDetailLayoutBuilder::GetDetailFont())
+				SNew(SGOAPStateWidget).GOAPState()
+
+			];
 	}
 
-	check(SomeUPropertyHandle.IsValid());
 
-
-	HeaderRow.NameContent()
-		[
-			//StructPropertyHandle->CreatePropertyNameWidget(TEXT("New property header name"), false)
-			StructPropertyHandle->CreatePropertyNameWidget()
-		]
-	.ValueContent()
-		.MinDesiredWidth(500)
-		[
-			//SNew(STextBlock)
-			//.Text(LOCTEXT("Extra info", "Some new representation"))
-		//.Font(IDetailLayoutBuilder::GetDetailFont())
-			SNew(SGOAPStateWidget)
-			
-		];
 }
 
 void FGOAPStateCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)

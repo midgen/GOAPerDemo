@@ -8,6 +8,7 @@
 
 void SGOAPStateWidget::Construct(const FArguments& Args)
 {
+	GOAPState = Args._GOAPState;
 
 	ChildSlot
 		[
@@ -51,6 +52,7 @@ TSharedRef<ITableRow> SGOAPStateWidget::OnGenerateRowForList(TSharedPtr<FGOAPAto
 		.Padding(2.0f)
 		[
 			SNew(SGOAPAtomWidget)
+			.ParentStateWidget(thisShared)
 		];
 }
 

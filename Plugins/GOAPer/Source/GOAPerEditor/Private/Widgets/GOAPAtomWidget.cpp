@@ -6,8 +6,10 @@
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
 
-void SGOAPAtomWidget::Construct(const FArguments& Args)
+void SGOAPAtomWidget::Construct(const SGOAPAtomWidget::FArguments& Args)
 {
+	ParentStateWidget = Args._ParentStateWidget;
+
 	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
 	if (Settings)
 	{
