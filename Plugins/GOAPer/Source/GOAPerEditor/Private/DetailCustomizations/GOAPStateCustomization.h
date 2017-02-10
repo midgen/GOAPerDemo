@@ -12,5 +12,6 @@ public:
 	virtual void CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
 
 private:
-	TSharedPtr<IPropertyHandle> SomeUPropertyHandle;
+	TSharedPtr<IPropertyHandleMap> StateUPropertyHandle;
+	TWeakObjectPtr<UMapProperty> StateUProperty;
 };

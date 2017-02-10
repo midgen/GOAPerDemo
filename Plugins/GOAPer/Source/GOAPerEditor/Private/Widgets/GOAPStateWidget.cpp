@@ -8,7 +8,7 @@
 
 void SGOAPStateWidget::Construct(const FArguments& Args)
 {
-	GOAPState = Args._GOAPState;
+	GOAPStateHandle = Args._GOAPStateHandle;
 
 	ChildSlot
 		[

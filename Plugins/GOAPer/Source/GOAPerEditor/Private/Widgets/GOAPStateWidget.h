@@ -7,16 +7,16 @@ class SGOAPStateWidget : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SGOAPStateWidget)
-		: _GOAPState()
+		: _GOAPStateHandle()
 	{}
-	SLATE_ARGUMENT(TWeakPtr<FGOAPState>, GOAPState)
+	SLATE_ARGUMENT(TWeakPtr<IPropertyHandleMap>, GOAPStateHandle)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& Args);
 
 	FReply ButtonPressed();
 
-	TWeakPtr<FGOAPState> GOAPState;
+	TWeakPtr<IPropertyHandleMap> GOAPStateHandle;
 
 	TArray<TSharedPtr<FGOAPAtom>> Atoms;
 

@@ -22,27 +22,40 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 
 		if (ChildHandle->GetProperty()->GetName() == TEXT("State"))
 		{
-			SomeUPropertyHandle = ChildHandle;
+			// Got the IPropertyHandleMap
+			StateUPropertyHandle = ChildHandle->AsMap();
+			// got the UMapProperty
+			StateUProperty = Cast<UMapProperty>(ChildHandle->GetProperty());
+
+			FScriptMapHelper ScriptMapHelper(StateUProperty.Get(), !!!MapValuePtr!!!);
+
+			const int32 ElementCount = ScriptMapHelper.Num();
+
+			for (int32 j = 0; j < ElementCount; ++j)
+			{
+
+			}
+
 		}
-
-		check(SomeUPropertyHandle.IsValid());
-
-
-		HeaderRow.NameContent()
-			[
-				//StructPropertyHandle->CreatePropertyNameWidget(TEXT("New property header name"), false)
-				StructPropertyHandle->CreatePropertyNameWidget()
-			]
-		.ValueContent()
-			.MinDesiredWidth(500)
-			[
-				//SNew(STextBlock)
-				//.Text(LOCTEXT("Extra info", "Some new representation"))
-				//.Font(IDetailLayoutBuilder::GetDetailFont())
-				SNew(SGOAPStateWidget).GOAPState()
-
-			];
 	}
+
+	check(StateUPropertyHandle.IsValid());
+
+
+	HeaderRow.NameContent()
+		[
+			//StructPropertyHandle->CreatePropertyNameWidget(TEXT("New property header name"), false)
+			StructPropertyHandle->CreatePropertyNameWidget()
+		]
+	.ValueContent()
+		.MinDesiredWidth(500)
+		[
+			//SNew(STextBlock)
+			//.Text(LOCTEXT("Extra info", "Some new representation"))
+			//.Font(IDetailLayoutBuilder::GetDetailFont())
+			SNew(SGOAPStateWidget).GOAPStateHandle(StateUPropertyHandle)
+
+		];
 
 
 }
