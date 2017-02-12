@@ -16,8 +16,14 @@ private:
 
 	TArray<TSharedPtr<FString>> AvailableOptions;
 
+	TSharedPtr<IPropertyHandle> KeyHandle;
+	TSharedPtr<IPropertyHandle> ValueHandle;
+	TSharedPtr<STextComboBox> KeyComboBox;
+	TSharedPtr<SCheckBox> ValueCheckBox;
+
 	uint8 Key;
 	bool Value;
 
+	void OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo);
 
 };

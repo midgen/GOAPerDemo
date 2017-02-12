@@ -33,10 +33,12 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 		const TSharedRef< IPropertyHandle > ChildHandle = StructPropertyHandle->GetChildHandle(ChildIndex).ToSharedRef();
 		if (ChildHandle->GetProperty()->GetName() == TEXT("Key"))
 		{
+			KeyHandle = ChildHandle;
 			ChildHandle->GetValue(Key);
 		}
 		if (ChildHandle->GetProperty()->GetName() == TEXT("Value"))
 		{
+			ValueHandle = ChildHandle;
 			ChildHandle->GetValue(Value);
 		}
 
@@ -57,14 +59,15 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 			+SHorizontalBox::Slot()
 			.HAlign(HAlign_Left)
 			[
-				SNew(STextComboBox)
+				SAssignNew(KeyComboBox, STextComboBox)
 				.OptionsSource(&AvailableOptions)
+				.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
 				.InitiallySelectedItem(AvailableOptions[0])
 			]
 			+ SHorizontalBox::Slot()
 			.HAlign(HAlign_Right)
 			[
-				SNew(SCheckBox)
+				SAssignNew(ValueCheckBox, SCheckBox)
 				.IsChecked(true)
 			]
 			
@@ -77,6 +80,18 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 void FGOAPStateCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	//Create further customization here
+}
+
+
+void FGOAPStateCustomization::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
+{
+	for (int32 i = 0; i < AvailableOptions.Num(); ++i)
+	{
+		if (AvailableOptions[i] == ItemSelected)
+		{
+			//KeyHandle->SetValue(i);
+		}
+	}
 }
 
 #undef LOCTEXT_NAMESPACE
