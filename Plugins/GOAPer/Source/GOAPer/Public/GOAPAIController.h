@@ -8,6 +8,7 @@
 #include "GOAPFSMState.h"
 #include "GOAPAction.h"
 #include "GOAPState.h"
+#include "GOAPStateUI.h"
 #include "GOAPPlanner.h"
 #include "GameFramework/Actor.h"
 #include "GOAPAIController.generated.h"
@@ -52,6 +53,10 @@ public:
 	FGOAPState StartingState;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	FGOAPAtom DefaultGoal;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	FGOAPStateUI StartingStateUI;
+
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

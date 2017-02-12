@@ -1,6 +1,9 @@
 #include "GOAPerEditor.h"
 #include "GOAPStateCustomization.h"
 #include "GOAPState.h"
+#include "GOAPerSettings.h"
+#include "STextComboBox.h"
+#include "SCheckBox.h"
 #include "../Widgets/GOAPStateWidget.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
@@ -13,33 +16,33 @@ TSharedRef<IPropertyTypeCustomization> FGOAPStateCustomization::MakeInstance()
 
 void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> StructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
+	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
+
+	for (auto& stateString : Settings->AState)
+	{
+		AvailableOptions.Add(MakeShareable<FString>(&stateString));
+	}
+
+
 	uint32 NumChildren;
 	StructPropertyHandle->GetNumChildren(NumChildren);
+	StateStructProperty = Cast<UStructProperty>(StructPropertyHandle->GetProperty());
 
 	for (uint32 ChildIndex = 0; ChildIndex < NumChildren; ++ChildIndex)
 	{
 		const TSharedRef< IPropertyHandle > ChildHandle = StructPropertyHandle->GetChildHandle(ChildIndex).ToSharedRef();
-
-		if (ChildHandle->GetProperty()->GetName() == TEXT("State"))
+		if (ChildHandle->GetProperty()->GetName() == TEXT("Key"))
 		{
-			// Got the IPropertyHandleMap
-			StateUPropertyHandle = ChildHandle->AsMap();
-			// got the UMapProperty
-			StateUProperty = Cast<UMapProperty>(ChildHandle->GetProperty());
-
-			FScriptMapHelper ScriptMapHelper(StateUProperty.Get(), !!!MapValuePtr!!!);
-
-			const int32 ElementCount = ScriptMapHelper.Num();
-
-			for (int32 j = 0; j < ElementCount; ++j)
-			{
-
-			}
-
+			ChildHandle->GetValue(Key);
 		}
+		if (ChildHandle->GetProperty()->GetName() == TEXT("Value"))
+		{
+			ChildHandle->GetValue(Value);
+		}
+
 	}
 
-	check(StateUPropertyHandle.IsValid());
+	check(StateStructProperty.IsValid());
 
 
 	HeaderRow.NameContent()
@@ -50,13 +53,24 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 	.ValueContent()
 		.MinDesiredWidth(500)
 		[
-			//SNew(STextBlock)
-			//.Text(LOCTEXT("Extra info", "Some new representation"))
-			//.Font(IDetailLayoutBuilder::GetDetailFont())
-			SNew(SGOAPStateWidget).GOAPStateHandle(StateUPropertyHandle)
+			SNew(SHorizontalBox)
+			+SHorizontalBox::Slot()
+			.HAlign(HAlign_Left)
+			[
+				SNew(STextComboBox)
+				.OptionsSource(&AvailableOptions)
+				.InitiallySelectedItem(AvailableOptions[0])
+			]
+			+ SHorizontalBox::Slot()
+			.HAlign(HAlign_Right)
+			[
+				SNew(SCheckBox)
+				.IsChecked(true)
+			]
+			
+			
 
 		];
-
 
 }
 

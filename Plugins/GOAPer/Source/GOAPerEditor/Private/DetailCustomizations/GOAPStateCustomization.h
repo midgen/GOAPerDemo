@@ -1,5 +1,5 @@
 #include "Editor/DetailCustomizations/Private/DetailCustomizationsPrivatePCH.h"
-
+#include "GOAPState.h"
 #pragma once
 
 class FGOAPStateCustomization : public IPropertyTypeCustomization
@@ -12,6 +12,12 @@ public:
 	virtual void CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
 
 private:
-	TSharedPtr<IPropertyHandleMap> StateUPropertyHandle;
-	TWeakObjectPtr<UMapProperty> StateUProperty;
+	TWeakObjectPtr<UStructProperty> StateStructProperty;
+
+	TArray<TSharedPtr<FString>> AvailableOptions;
+
+	uint8 Key;
+	bool Value;
+
+
 };

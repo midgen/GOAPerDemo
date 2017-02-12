@@ -1,5 +1,5 @@
 #include "GOAPerEditor.h"
-#include "GOAPState.h"
+#include "GOAPStateUI.h"
 #include "DetailCustomizations/GOAPStateCustomization.h"
 
 
@@ -16,7 +16,7 @@ void FGOAPerEditorModule::StartupModule()
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
 	//Custom properties
-	PropertyModule.RegisterCustomPropertyTypeLayout("GOAPState", FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGOAPStateCustomization::MakeInstance));
+	PropertyModule.RegisterCustomPropertyTypeLayout("GOAPAtom", FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGOAPStateCustomization::MakeInstance));
 }
 
 void FGOAPerEditorModule::ShutdownModule()
