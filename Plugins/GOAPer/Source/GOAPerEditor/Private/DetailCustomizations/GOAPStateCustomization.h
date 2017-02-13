@@ -26,11 +26,13 @@ private:
 	TSharedPtr<STextComboBox> KeyComboBox;
 	TSharedPtr<SCheckBox> ValueCheckBox;
 
-	FString SelectedString;
+	TSharedPtr<FString> SelectedString;
 	uint8 Key;
 	bool Value;
 
 	void OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo);
+	void OnStateListOpened();
+	void OnCheckStateChanged(ECheckBoxState CheckState);
 
 	/** Property utilites */
 	TSharedPtr<class IPropertyUtilities> PropertyUtilities;

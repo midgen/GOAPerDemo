@@ -12,9 +12,9 @@ TArray<FString> UGOAPerSettings::GetStateSettings()
 	return AState;
 }
 
-FString UGOAPerSettings::GetStringForByte(const uint8 inByte)
+TSharedPtr<FString> UGOAPerSettings::GetStringForByte(const uint8 inByte)
 {
-	FString result = AState[inByte];
+	TSharedPtr<FString> result = MakeShareable<FString>(new FString(AState[inByte]));
 	return result;
 }
 

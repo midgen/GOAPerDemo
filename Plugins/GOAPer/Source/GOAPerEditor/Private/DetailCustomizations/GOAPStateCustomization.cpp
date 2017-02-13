@@ -45,7 +45,7 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 		}
 
 	}
-
+	
 	SelectedString = GOAPSettings->GetStringForByte(Key);
 
 	check(KeyHandle.IsValid());
@@ -66,12 +66,13 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 				SAssignNew(KeyComboBox, STextComboBox)
 				.OptionsSource(&AvailableOptions)
 				.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
-				.InitiallySelectedItem(MakeShareable<FString>(&SelectedString))
+				.InitiallySelectedItem(SelectedString)
 			]
 			+ SHorizontalBox::Slot()
 			.HAlign(HAlign_Right)
 			[
 				SAssignNew(ValueCheckBox, SCheckBox)
+				.OnCheckStateChanged(this, &FGOAPStateCustomization::OnCheckStateChanged)
 				.IsChecked(Value)
 			]
 		];
@@ -87,17 +88,36 @@ void FGOAPStateCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle
 
 void FGOAPStateCustomization::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
-	// Fetches the byte index for this string from the settings class
-	for (int32 i = 0; i < AvailableOptions.Num(); ++i)
+	if (ItemSelected.IsValid())
 	{
-		if (AvailableOptions[i] == ItemSelected)
+		// Fetches the byte index for this string from the settings class
+		for (int32 i = 0; i < AvailableOptions.Num(); ++i)
 		{
-			KeyHandle->SetValue(GOAPSettings->GetByteKey(ItemSelected));
-			
-			SelectedString = GOAPSettings->GetStringForByte(Key);
+			if (AvailableOptions[i] == ItemSelected)
+			{
+				Key = GOAPSettings->GetByteKey(ItemSelected);
+				KeyHandle->SetValue(Key);
+				//SelectedString = ItemSelected;
+			}
 		}
 	}
-	PropertyUtilities->RequestRefresh();
+}
+
+void FGOAPStateCustomization::OnStateListOpened()
+{
+
+}
+
+void FGOAPStateCustomization::OnCheckStateChanged(ECheckBoxState CheckState)
+{
+	if (CheckState == ECheckBoxState::Checked)
+	{
+		ValueHandle->SetValue(true);
+	}
+	else
+	{
+		ValueHandle->SetValue(false);
+	}
 }
 
 #undef LOCTEXT_NAMESPACE
