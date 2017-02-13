@@ -14,12 +14,17 @@ bool AGOAPAIController::LoadGOAPDefaults()
 {
 	CurrentGoal = DefaultGoal;
 
+	// Create the actions
 	for (TSubclassOf<UGOAPAction> elem : AvailableActions)
 	{
 		GOAPActions.Add(NewObject<UGOAPAction>(this, elem));
 	}
 
-	GOAPState = GOAPState + StartingState;
+	// Load default state
+	for (FGOAPAtom& state : StartingState.State)
+	{
+		GOAPState.SetState(state.Key, state.Value);
+	}
 
 	return true;
 }
@@ -40,7 +45,7 @@ void AGOAPAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Run the FSM
-	TSharedPtr<GOAPFSMState> _possibleNewState = state->Tick(*this, DeltaTime);
+	TSharedPtr<GOAPFSMState> _possibleNewState = FSMstate->Tick(*this, DeltaTime);
 	if (_possibleNewState.IsValid())
 	{
 		SetNewState(_possibleNewState);
@@ -56,9 +61,9 @@ void AGOAPAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollo
 
 void AGOAPAIController::SetNewState(TSharedPtr<GOAPFSMState> newState)
 {
-	state.Reset();
-	state = newState;
-	state->Enter(*this);
+	FSMstate.Reset();
+	FSMstate = newState;
+	FSMstate->Enter(*this);
 }
 
 void AGOAPAIController::SetDoActionState()
@@ -146,9 +151,9 @@ bool AGOAPAIController::BuildActionPlanForCurrentGoal()
 
 FString AGOAPAIController::GetCurrentFSMStateString()
 {
-	if (state.IsValid())
+	if (FSMstate.IsValid())
 	{
-		return state->ToString();
+		return FSMstate->ToString();
 	}
 	return TEXT("No Valid State");
 }

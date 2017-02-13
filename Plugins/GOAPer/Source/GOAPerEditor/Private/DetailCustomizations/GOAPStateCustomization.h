@@ -1,5 +1,6 @@
 #include "Editor/DetailCustomizations/Private/DetailCustomizationsPrivatePCH.h"
 #include "GOAPState.h"
+#include "GOAPerSettings.h"
 #pragma once
 
 class FGOAPStateCustomization : public IPropertyTypeCustomization
@@ -12,6 +13,8 @@ public:
 	virtual void CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
 
 private:
+	UGOAPerSettings* GOAPSettings = GetMutableDefault<UGOAPerSettings>();
+
 	TWeakObjectPtr<UStructProperty> StateStructProperty;
 
 	TArray<TSharedPtr<FString>> AvailableOptions;
@@ -26,4 +29,6 @@ private:
 
 	void OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo);
 
+	/** Property utilites */
+	TSharedPtr<class IPropertyUtilities> PropertyUtilities;
 };

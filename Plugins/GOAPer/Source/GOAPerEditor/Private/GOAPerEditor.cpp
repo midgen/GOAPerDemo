@@ -21,6 +21,10 @@ void FGOAPerEditorModule::StartupModule()
 
 void FGOAPerEditorModule::ShutdownModule()
 {
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+
+	//Custom properties
+	PropertyModule.UnregisterCustomPropertyTypeLayout("GOAPAtom");
 	UE_LOG(GOAPerEditor, Warning, TEXT("GOAPerEditorModule: Log Ended"));
 }
 

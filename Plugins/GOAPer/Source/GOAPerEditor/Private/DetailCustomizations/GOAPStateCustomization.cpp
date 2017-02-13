@@ -1,10 +1,10 @@
 #include "GOAPerEditor.h"
 #include "GOAPStateCustomization.h"
 #include "GOAPState.h"
-#include "GOAPerSettings.h"
 #include "STextComboBox.h"
 #include "SCheckBox.h"
 #include "../Widgets/GOAPStateWidget.h"
+#include "IPropertyUtilities.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
 
@@ -16,21 +16,21 @@ TSharedRef<IPropertyTypeCustomization> FGOAPStateCustomization::MakeInstance()
 
 void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> StructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
-	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
+	PropertyUtilities = StructCustomizationUtils.GetPropertyUtilities();
 
-	for (auto& stateString : Settings->AState)
+	// Get the available options from our settings class
+	for (auto& stateString : GOAPSettings->AState)
 	{
 		AvailableOptions.Add(MakeShareable<FString>(&stateString));
 	}
 
-
+	// Now fetch the handles to our child properties, and get their values
 	uint32 NumChildren;
 	StructPropertyHandle->GetNumChildren(NumChildren);
-	StateStructProperty = Cast<UStructProperty>(StructPropertyHandle->GetProperty());
 
 	for (uint32 ChildIndex = 0; ChildIndex < NumChildren; ++ChildIndex)
 	{
-		const TSharedRef< IPropertyHandle > ChildHandle = StructPropertyHandle->GetChildHandle(ChildIndex).ToSharedRef();
+		const TSharedPtr< IPropertyHandle > ChildHandle = StructPropertyHandle->GetChildHandle(ChildIndex);
 		if (ChildHandle->GetProperty()->GetName() == TEXT("Key"))
 		{
 			KeyHandle = ChildHandle;
@@ -44,36 +44,33 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 
 	}
 
-	check(StateStructProperty.IsValid());
+	
 
 
-	HeaderRow.NameContent()
-		[
-			//StructPropertyHandle->CreatePropertyNameWidget(TEXT("New property header name"), false)
-			StructPropertyHandle->CreatePropertyNameWidget()
-		]
+	HeaderRow
+	.NameContent()
+	[
+		StructPropertyHandle->CreatePropertyNameWidget()
+	]
 	.ValueContent()
-		.MinDesiredWidth(500)
+	.MinDesiredWidth(500)
+	[
+		SNew(SHorizontalBox)
+		+SHorizontalBox::Slot()
+		.HAlign(HAlign_Left)
 		[
-			SNew(SHorizontalBox)
-			+SHorizontalBox::Slot()
-			.HAlign(HAlign_Left)
-			[
-				SAssignNew(KeyComboBox, STextComboBox)
-				.OptionsSource(&AvailableOptions)
-				.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
-				.InitiallySelectedItem(AvailableOptions[0])
-			]
-			+ SHorizontalBox::Slot()
-			.HAlign(HAlign_Right)
-			[
-				SAssignNew(ValueCheckBox, SCheckBox)
-				.IsChecked(true)
-			]
-			
-			
-
-		];
+			SAssignNew(KeyComboBox, STextComboBox)
+			.OptionsSource(&AvailableOptions)
+			.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
+			.InitiallySelectedItem(AvailableOptions[0])
+		]
+		+ SHorizontalBox::Slot()
+		.HAlign(HAlign_Right)
+		[
+			SAssignNew(ValueCheckBox, SCheckBox)
+			.IsChecked(Value)
+		]
+	];
 
 }
 
@@ -89,9 +86,10 @@ void FGOAPStateCustomization::OnStateValueChanged(TSharedPtr<FString> ItemSelect
 	{
 		if (AvailableOptions[i] == ItemSelected)
 		{
-			//KeyHandle->SetValue(i);
+			KeyHandle->SetValue(GOAPSettings->GetByteKey(ItemSelected));
 		}
 	}
+	PropertyUtilities->RequestRefresh();
 }
 
 #undef LOCTEXT_NAMESPACE

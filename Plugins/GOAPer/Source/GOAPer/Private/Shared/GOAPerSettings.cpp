@@ -11,3 +11,16 @@ TArray<FString> UGOAPerSettings::GetStateSettings()
 {
 	return AState;
 }
+
+uint8 UGOAPerSettings::GetByteKey(TSharedPtr<FString> inString)
+{
+	for (uint8 i = 0; i < AState.Num(); ++i)
+	{
+		if (inString->Compare(AState[i]) == 0)
+		{
+			return i;
+		}
+	}
+
+	return 0;
+}

@@ -28,4 +28,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = GOAPer)
 	TArray<FString> GetStateSettings();
+
+	uint8 GetByteKey(TSharedPtr<FString> inString);
 };

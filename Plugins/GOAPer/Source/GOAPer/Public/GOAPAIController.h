@@ -34,7 +34,7 @@ public:
 	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
 
 	// Current FSM States
-	TSharedPtr<GOAPFSMState> state;
+	TSharedPtr<GOAPFSMState> FSMstate;
 	// The current active Plan
 	TQueue<TWeakObjectPtr<UGOAPAction>>	ActionQueue;
 	// Current active action
@@ -50,12 +50,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	TArray<TSubclassOf<UGOAPAction>> AvailableActions;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
-	FGOAPState StartingState;
+	FGOAPStateUI StartingState;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	FGOAPAtom DefaultGoal;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
-	FGOAPStateUI StartingStateUI;
+
 
 
 	virtual void BeginPlay() override;
