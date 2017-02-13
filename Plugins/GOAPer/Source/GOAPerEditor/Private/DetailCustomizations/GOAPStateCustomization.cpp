@@ -14,14 +14,16 @@ TSharedRef<IPropertyTypeCustomization> FGOAPStateCustomization::MakeInstance()
 	return MakeShareable(new FGOAPStateCustomization());
 }
 
-void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> StructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
+void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> inStructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	PropertyUtilities = StructCustomizationUtils.GetPropertyUtilities();
+
+	StructPropertyHandle = inStructPropertyHandle;
 
 	// Get the available options from our settings class
 	for (auto& stateString : GOAPSettings->AState)
 	{
-		AvailableOptions.Add(MakeShareable<FString>(&stateString));
+		AvailableOptions.Add(MakeShareable<FString>(new FString(stateString)));
 	}
 
 	// Now fetch the handles to our child properties, and get their values
@@ -44,49 +46,55 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 
 	}
 
-	
+	SelectedString = GOAPSettings->GetStringForByte(Key);
 
+	check(KeyHandle.IsValid());
+	check(ValueHandle.IsValid());
 
 	HeaderRow
-	.NameContent()
-	[
-		StructPropertyHandle->CreatePropertyNameWidget()
-	]
-	.ValueContent()
-	.MinDesiredWidth(500)
-	[
-		SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.HAlign(HAlign_Left)
+		.NameContent()
 		[
-			SAssignNew(KeyComboBox, STextComboBox)
-			.OptionsSource(&AvailableOptions)
-			.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
-			.InitiallySelectedItem(AvailableOptions[0])
+			StructPropertyHandle->CreatePropertyNameWidget(LOCTEXT("Extra info", "Header Name"))
 		]
-		+ SHorizontalBox::Slot()
-		.HAlign(HAlign_Right)
+		.ValueContent()
+		.MinDesiredWidth(500)
 		[
-			SAssignNew(ValueCheckBox, SCheckBox)
-			.IsChecked(Value)
-		]
-	];
+			SNew(SHorizontalBox)
+			+ SHorizontalBox::Slot()
+			.HAlign(HAlign_Left)
+			[
+				SAssignNew(KeyComboBox, STextComboBox)
+				.OptionsSource(&AvailableOptions)
+				.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
+				.InitiallySelectedItem(MakeShareable<FString>(&SelectedString))
+			]
+			+ SHorizontalBox::Slot()
+			.HAlign(HAlign_Right)
+			[
+				SAssignNew(ValueCheckBox, SCheckBox)
+				.IsChecked(Value)
+			]
+		];
+
 
 }
 
-void FGOAPStateCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
+
+void FGOAPStateCustomization::CustomizeChildren(TSharedRef<class IPropertyHandle> inStructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	//Create further customization here
 }
 
-
 void FGOAPStateCustomization::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
+	// Fetches the byte index for this string from the settings class
 	for (int32 i = 0; i < AvailableOptions.Num(); ++i)
 	{
 		if (AvailableOptions[i] == ItemSelected)
 		{
 			KeyHandle->SetValue(GOAPSettings->GetByteKey(ItemSelected));
+			
+			SelectedString = GOAPSettings->GetStringForByte(Key);
 		}
 	}
 	PropertyUtilities->RequestRefresh();

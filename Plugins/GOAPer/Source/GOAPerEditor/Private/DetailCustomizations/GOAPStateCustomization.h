@@ -9,21 +9,24 @@ public:
 	static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 
 	/** IPropertyTypeCustomization interface */
-	virtual void CustomizeHeader(TSharedRef<class IPropertyHandle> StructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
-	virtual void CustomizeChildren(TSharedRef<class IPropertyHandle> StructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
+	virtual void CustomizeHeader(TSharedRef<class IPropertyHandle> inStructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
+	virtual void CustomizeChildren(TSharedRef<class IPropertyHandle> inStructPropertyHandle, class IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;
+
 
 private:
 	UGOAPerSettings* GOAPSettings = GetMutableDefault<UGOAPerSettings>();
 
-	TWeakObjectPtr<UStructProperty> StateStructProperty;
-
 	TArray<TSharedPtr<FString>> AvailableOptions;
+
+	TSharedPtr<IPropertyHandle> StructPropertyHandle;
 
 	TSharedPtr<IPropertyHandle> KeyHandle;
 	TSharedPtr<IPropertyHandle> ValueHandle;
+
 	TSharedPtr<STextComboBox> KeyComboBox;
 	TSharedPtr<SCheckBox> ValueCheckBox;
 
+	FString SelectedString;
 	uint8 Key;
 	bool Value;
 

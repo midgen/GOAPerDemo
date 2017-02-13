@@ -12,6 +12,12 @@ TArray<FString> UGOAPerSettings::GetStateSettings()
 	return AState;
 }
 
+FString UGOAPerSettings::GetStringForByte(const uint8 inByte)
+{
+	FString result = AState[inByte];
+	return result;
+}
+
 uint8 UGOAPerSettings::GetByteKey(TSharedPtr<FString> inString)
 {
 	for (uint8 i = 0; i < AState.Num(); ++i)

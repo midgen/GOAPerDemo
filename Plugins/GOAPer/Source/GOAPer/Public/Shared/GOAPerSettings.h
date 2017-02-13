@@ -29,5 +29,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = GOAPer)
 	TArray<FString> GetStateSettings();
 
+	FString GetStringForByte(const uint8 inByte);
 	uint8 GetByteKey(TSharedPtr<FString> inString);
 };
