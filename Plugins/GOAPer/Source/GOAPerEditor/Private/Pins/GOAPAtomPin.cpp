@@ -20,7 +20,7 @@ TSharedRef<SWidget>	SGOAPAtomPin::GetDefaultValueWidget()
 	}
 
 	//Creating the button that adds a new item on the list when pressed
-	SNew(SHorizontalBox)
+	 return SNew(SHorizontalBox)
 		+ SHorizontalBox::Slot()
 		.HAlign(HAlign_Left)
 		[
@@ -35,7 +35,7 @@ TSharedRef<SWidget>	SGOAPAtomPin::GetDefaultValueWidget()
 			SNew(SCheckBox)
 			.OnCheckStateChanged(this, &SGOAPAtomPin::OnCheckStateChanged)
 		.IsChecked(Value)
-		]
+		];
 
 }
 
@@ -59,49 +59,19 @@ void SGOAPAtomPin::OnCheckStateChanged(ECheckBoxState CheckState)
 {
 	if (CheckState == ECheckBoxState::Checked)
 	{
-		ValueHandle->SetValue(true);
+		Value = true;
 	}
 	else
 	{
-		ValueHandle->SetValue(false);
+		Value = false;
 	}
+	SetValue(Key, Value);
 }
 
 
 
-void SetValue(uint8 aKey, bool aValue)
+void SGOAPAtomPin::SetValue(uint8 aKey, bool aValue)
 {
 	FGOAPAtom atom = FGOAPAtom(aKey, aValue);
-	GraphPinObj->GetSchema()->TrySetDefaultValue(*GraphPinObj, atom);
-}
-
-void SGOAPAtomPin::OnAttributeSelected(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
-{
-	//FString CurrentValue = GraphPinObj->GetDefaultAsString();
-	FString CurrentDefaultValue = GraphPinObj->GetDefaultAsString();
-	FString attribute = *ItemSelected;
-	if (CurrentDefaultValue.IsEmpty())
-	{
-		CurrentDefaultValue = FString(TEXT("()"));
-	}
-	//here we construct, setter for value in struct.
-	//open it with (
-	FString AttributeString = TEXT("(");
-	if (!attribute.IsEmpty())
-	{
-		//now set here proerty name from USTRUCT(), \" - will add opening "
-		// so it will look like AttributeName="
-		AttributeString += TEXT("AttributeName=\"");
-		//add value you want to set to your property"
-		AttributeString += attribute;
-		//close with "
-		AttributeString += TEXT("\"");
-	}
-	//and at last add ) so it will look like (AttributeName="Value");
-	AttributeString += TEXT(")");
-	//and here we set our value to parameter if it different than last one.
-	if (!CurrentDefaultValue.Equals(AttributeString))
-	{
-		
-	}
+	GraphPinObj->GetSchema()->TrySetDefaultObject(*GraphPinObj, (UObject*)&atom);
 }

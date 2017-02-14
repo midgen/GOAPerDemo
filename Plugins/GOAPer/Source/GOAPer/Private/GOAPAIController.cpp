@@ -172,6 +172,11 @@ FString AGOAPAIController::GetCurrentActionString()
 
 
 
+void AGOAPAIController::SetGOAPState(FGOAPAtom aAtom)
+{
+
+}
+
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)
 {
 	TArray<UGOAPAction*> result;

@@ -1,5 +1,7 @@
 #include "GOAPerEditor.h"
 #include "GOAPStateUI.h"
+#include "Pins/GOAPAtomPin.h"
+#include "Pins/GOAPAtomPinFactory.h"
 #include "DetailCustomizations/GOAPStateCustomization.h"
 
 
@@ -17,6 +19,11 @@ void FGOAPerEditorModule::StartupModule()
 
 	//Custom properties
 	PropertyModule.RegisterCustomPropertyTypeLayout("GOAPAtom", FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGOAPStateCustomization::MakeInstance));
+
+	//create your factory and shared pointer to it.
+	TSharedPtr<FGOAPAtomPinFactory> GOAPAtomPinFactory = MakeShareable(new FGOAPAtomPinFactory());
+	//and now register it.
+	FEdGraphUtilities::RegisterVisualPinFactory(GOAPAtomPinFactory);
 }
 
 void FGOAPerEditorModule::ShutdownModule()

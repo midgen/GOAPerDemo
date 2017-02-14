@@ -92,6 +92,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	FString GetCurrentActionString();
 
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	void SetGOAPState(FGOAPAtom aAtom);
+
 	TWeakObjectPtr<AActor> MoveToTargetActor;
 
 };
