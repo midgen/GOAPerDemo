@@ -14,17 +14,9 @@ class GOAPER_API UGOAPerSettings
 
 public:
 
-	/** A test bool */
-	UPROPERTY(config, EditAnywhere, Category="GOAPer")
-	bool Test;
-
 	/** A test state*/
-	UPROPERTY(config, EditAnywhere, BlueprintReadOnly, Category=RemoteServer)
-	TArray<FString> AState;
-
-	/** The IP endpoint to listen to when the Remote Server runs in a game. */
-	UPROPERTY(config, EditAnywhere, Category=RemoteServer)
-	FString A;
+	UPROPERTY(config, EditAnywhere, BlueprintReadOnly, Category=State)
+	TArray<FString> AvailableStates;
 
 	UFUNCTION(BlueprintPure, Category = GOAPer)
 	TArray<FString> GetStateSettings();

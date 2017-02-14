@@ -9,20 +9,30 @@
 
 TArray<FString> UGOAPerSettings::GetStateSettings()
 {
-	return AState;
+	return AvailableStates;
 }
 
 TSharedPtr<FString> UGOAPerSettings::GetStringForByte(const uint8 inByte)
 {
-	TSharedPtr<FString> result = MakeShareable<FString>(new FString(AState[inByte]));
+	TSharedPtr<FString> result;
+	if (inByte < AvailableStates.Num())
+	{
+		result = MakeShareable<FString>(new FString(AvailableStates[inByte]));
+
+	}
+	else {
+		result = MakeShareable<FString>(new FString(TEXT("Invalid")));
+	}
+
 	return result;
+
 }
 
 uint8 UGOAPerSettings::GetByteKey(TSharedPtr<FString> inString)
 {
-	for (uint8 i = 0; i < AState.Num(); ++i)
+	for (uint8 i = 0; i < AvailableStates.Num(); ++i)
 	{
-		if (inString->Compare(AState[i]) == 0)
+		if (inString->Compare(AvailableStates[i]) == 0)
 		{
 			return i;
 		}

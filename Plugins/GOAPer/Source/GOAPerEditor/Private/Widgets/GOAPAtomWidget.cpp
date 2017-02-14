@@ -13,7 +13,7 @@ void SGOAPAtomWidget::Construct(const SGOAPAtomWidget::FArguments& Args)
 	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
 	if (Settings)
 	{
-		for (FString& state : Settings->AState)
+		for (FString& state : Settings->AvailableStates)
 		{
 			StateOptions.Add(MakeShareable<FString>(&state));
 		}

@@ -21,7 +21,7 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 	StructPropertyHandle = inStructPropertyHandle;
 
 	// Get the available options from our settings class
-	for (auto& stateString : GOAPSettings->AState)
+	for (auto& stateString : GOAPSettings->AvailableStates)
 	{
 		AvailableOptions.Add(MakeShareable<FString>(new FString(stateString)));
 	}
@@ -54,7 +54,7 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 	HeaderRow
 		.NameContent()
 		[
-			StructPropertyHandle->CreatePropertyNameWidget(LOCTEXT("Extra info", "Header Name"))
+			StructPropertyHandle->CreatePropertyNameWidget()
 		]
 		.ValueContent()
 		.MinDesiredWidth(500)
@@ -66,7 +66,7 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 				SAssignNew(KeyComboBox, STextComboBox)
 				.OptionsSource(&AvailableOptions)
 				.OnSelectionChanged(this, &FGOAPStateCustomization::OnStateValueChanged)
-				.InitiallySelectedItem(SelectedString)
+				.InitiallySelectedItem(AvailableOptions[Key])
 			]
 			+ SHorizontalBox::Slot()
 			.HAlign(HAlign_Right)
