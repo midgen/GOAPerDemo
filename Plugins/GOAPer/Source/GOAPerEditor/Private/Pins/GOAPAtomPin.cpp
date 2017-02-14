@@ -73,5 +73,42 @@ void SGOAPAtomPin::OnCheckStateChanged(ECheckBoxState CheckState)
 void SGOAPAtomPin::SetValue(uint8 aKey, bool aValue)
 {
 	FGOAPAtom atom = FGOAPAtom(aKey, aValue);
-	GraphPinObj->GetSchema()->TrySetDefaultObject(*GraphPinObj, (UObject*)&atom);
+
+	FString strKey;
+	strKey.AppendInt(aKey);
+
+	FString KeyString = TEXT("(");
+
+		//now set here proerty name from USTRUCT(), \" - will add opening "
+		// so it will look like AttributeName="
+		KeyString += TEXT("Key=\"");
+		//add value you want to set to your property"
+		KeyString += strKey;
+		//close with "
+		KeyString += TEXT("\"");
+	
+	//and at last add ) so it will look like (AttributeName="Value");
+	KeyString += TEXT(")");
+
+
+
+	GraphPinObj->GetSchema()->TrySetDefaultValue(*GraphPinObj, KeyString);
+
+	FString ValueString = TEXT("(");
+
+		//now set here proerty name from USTRUCT(), \" - will add opening "
+		// so it will look like AttributeName="
+		ValueString += TEXT("Value=\"");
+		//add value you want to set to your property"
+		ValueString += aValue ? TEXT("true") : TEXT("false");
+		//close with "
+		ValueString += TEXT("\"");
+	
+	//and at last add ) so it will look like (AttributeName="Value");
+	ValueString += TEXT(")");
+
+
+
+	GraphPinObj->GetSchema()->TrySetDefaultValue(*GraphPinObj, ValueString);
+
 }
