@@ -10,6 +10,7 @@
 #include "GOAPState.h"
 #include "GOAPStateUI.h"
 #include "GOAPPlanner.h"
+#include "GOAPAtomKey.h"
 #include "GameFramework/Actor.h"
 #include "GOAPAIController.generated.h"
 
@@ -78,10 +79,9 @@ public:
 
 	TArray<UGOAPAction*> GetValidActionsForState(const FGOAPState aState);
 
-	// Helper for setting/getting a GOAP Agent State
-	void SetGOAPStateSafe(uint8 eState, bool bValue);
 	bool isStateSatisfied(FGOAPAtom aState);
-	bool isStateSatisfied(const uint8 aState, const bool aValue);
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	bool isStateSatisfied(FGOAPAtomKey Key, const bool Value);
 
 	// Callback for MoveTo completion
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
@@ -93,7 +93,7 @@ public:
 	FString GetCurrentActionString();
 
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetGOAPState(FGOAPAtom aAtom);
+	void SetGOAPState(FGOAPAtomKey Key, bool Value);
 
 	TWeakObjectPtr<AActor> MoveToTargetActor;
 

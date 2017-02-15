@@ -16,9 +16,8 @@ public:
 	//this override is used to display slate widget used forcustomization.
 	virtual TSharedRef<SWidget>	GetDefaultValueWidget() override;
 	void OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo);
-	void OnCheckStateChanged(ECheckBoxState CheckState);
 
-	void SetValue(uint8 aKey, bool aValue);
+	void SetValue(uint8 aKey);
 private:
 	TArray<TSharedPtr<FString>> AvailableOptions;
 

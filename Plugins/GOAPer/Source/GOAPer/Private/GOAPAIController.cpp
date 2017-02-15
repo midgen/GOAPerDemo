@@ -84,11 +84,6 @@ void AGOAPAIController::ClearCurrentActionAndPlan()
 	SetIdleState();
 }
 
-void AGOAPAIController::SetGOAPStateSafe(uint8 eState, bool bValue)
-{
-	GOAPState.SetState(eState, bValue);
-}
-
 void AGOAPAIController::SetMoveToStateWithTarget(TWeakObjectPtr<AActor> aTargetActor, float aAcceptanceRadius)
 {
 	if (!aTargetActor.IsValid())
@@ -172,9 +167,9 @@ FString AGOAPAIController::GetCurrentActionString()
 
 
 
-void AGOAPAIController::SetGOAPState(FGOAPAtom aAtom)
+void AGOAPAIController::SetGOAPState(FGOAPAtomKey Key, bool Value)
 {
-
+	GOAPState.SetState(Key.Key, Value);
 }
 
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)
@@ -197,7 +192,7 @@ bool AGOAPAIController::isStateSatisfied(FGOAPAtom aAtom)
 	return GOAPState.IsStateSatisfied(aAtom.Key, aAtom.Value);
 }
 
-bool AGOAPAIController::isStateSatisfied(const uint8 aState, const bool aValue)
+bool AGOAPAIController::isStateSatisfied(FGOAPAtomKey Key, bool Value)
 {
-	return GOAPState.IsStateSatisfied(aState, aValue);
+	return GOAPState.IsStateSatisfied(Key.Key, Value);
 }

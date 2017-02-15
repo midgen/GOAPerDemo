@@ -18,32 +18,37 @@ TSharedRef<SWidget>	SGOAPAtomPin::GetDefaultValueWidget()
 	{
 		AvailableOptions.Add(MakeShareable<FString>(new FString(stateString)));
 	}
+	// Apparently this is how you deal with pin defaults. IT IS INSANE
+	FString CurrentDefault = GraphPinObj->GetDefaultAsString();
+	if (CurrentDefault.Len() > 0)
+	{
+		int32 StartIndex = 5;
+		int32 EndIndex;
+		CurrentDefault.FindLastChar(')', EndIndex);
+		FString DefaultValString = CurrentDefault.Mid(StartIndex, EndIndex);
+		Key = FCString::Atoi(*DefaultValString);
+	}
+	else {
+		Key = 0;
+	}
 
 	//Creating the button that adds a new item on the list when pressed
-	 return SNew(SHorizontalBox)
+	return SNew(SHorizontalBox)
 		+ SHorizontalBox::Slot()
 		.HAlign(HAlign_Left)
 		[
 			SNew(STextComboBox)
 			.OptionsSource(&AvailableOptions)
-		.OnSelectionChanged(this, &SGOAPAtomPin::OnStateValueChanged)
-		.InitiallySelectedItem(AvailableOptions[Key])
-		]
-	+ SHorizontalBox::Slot()
-		.HAlign(HAlign_Right)
-		[
-			SNew(SCheckBox)
-			.OnCheckStateChanged(this, &SGOAPAtomPin::OnCheckStateChanged)
-		.IsChecked(Value)
+			.OnSelectionChanged(this, &SGOAPAtomPin::OnStateValueChanged)
+			.InitiallySelectedItem(AvailableOptions[Key])
 		];
-
 }
 
 void SGOAPAtomPin::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
 	if (ItemSelected.IsValid())
 	{
-		// Fetches the byte index for this string from the settings class
+		// Fetches the byte index for this string from the available options
 		for (int32 i = 0; i < AvailableOptions.Num(); ++i)
 		{
 			if (AvailableOptions[i] == ItemSelected)
@@ -53,62 +58,24 @@ void SGOAPAtomPin::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelect
 			}
 		}
 	}
-}
-
-void SGOAPAtomPin::OnCheckStateChanged(ECheckBoxState CheckState)
-{
-	if (CheckState == ECheckBoxState::Checked)
-	{
-		Value = true;
-	}
-	else
-	{
-		Value = false;
-	}
-	SetValue(Key, Value);
+	SetValue(Key);
 }
 
 
 
-void SGOAPAtomPin::SetValue(uint8 aKey, bool aValue)
+void SGOAPAtomPin::SetValue(uint8 aKey)
 {
-	FGOAPAtom atom = FGOAPAtom(aKey, aValue);
-
+	// Set the default
 	FString strKey;
 	strKey.AppendInt(aKey);
 
 	FString KeyString = TEXT("(");
 
-		//now set here proerty name from USTRUCT(), \" - will add opening "
-		// so it will look like AttributeName="
-		KeyString += TEXT("Key=\"");
-		//add value you want to set to your property"
-		KeyString += strKey;
-		//close with "
-		KeyString += TEXT("\"");
-	
-	//and at last add ) so it will look like (AttributeName="Value");
+	KeyString += TEXT("Key=");
+	KeyString += strKey;
 	KeyString += TEXT(")");
-
-
 
 	GraphPinObj->GetSchema()->TrySetDefaultValue(*GraphPinObj, KeyString);
 
-	FString ValueString = TEXT("(");
-
-		//now set here proerty name from USTRUCT(), \" - will add opening "
-		// so it will look like AttributeName="
-		ValueString += TEXT("Value=\"");
-		//add value you want to set to your property"
-		ValueString += aValue ? TEXT("true") : TEXT("false");
-		//close with "
-		ValueString += TEXT("\"");
-	
-	//and at last add ) so it will look like (AttributeName="Value");
-	ValueString += TEXT(")");
-
-
-
-	GraphPinObj->GetSchema()->TrySetDefaultValue(*GraphPinObj, ValueString);
 
 }
