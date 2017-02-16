@@ -45,6 +45,12 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 		}
 
 	}
+
+	// Make sure if we've changed options we don't go out of bounds
+	if (Key >= AvailableOptions.Num())
+	{
+		Key = 0;
+	}
 	
 	SelectedString = GOAPSettings->GetStringForByte(Key);
 

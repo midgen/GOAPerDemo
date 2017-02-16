@@ -178,7 +178,7 @@ TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState
 
 	for (auto& action : GOAPActions)
 	{
-		if (action->PreConditions.IsSatisfiesState(aState))
+		if (action->PreConditions_Internal.IsSatisfiesState(aState))
 		{
 			result.Push(action);
 		}

@@ -47,7 +47,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 				{
 					FGOAPNode newNode;
 					newNode.State = workNode.State;
-					newNode.State = newNode.State + action->Effects;
+					newNode.State = newNode.State + action->Effects_Internal;
 					newNode.Parent.Action = action;
 					newNode.Parent.Node = &workNode;
 					OpenNodes.Push(newNode);

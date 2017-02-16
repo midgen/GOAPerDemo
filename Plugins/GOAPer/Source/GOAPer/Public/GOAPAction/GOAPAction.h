@@ -2,6 +2,7 @@
 #include "GOAPer.h"
 #include "GOAPAtom.h"
 #include "GOAPState.h"
+#include "GOAPStateUI.h"
 #include "GOAPAction.generated.h"
 
 
@@ -36,11 +37,16 @@ public:
 
 	// TODO: Both these should be sets/maps
 	// Agent State values that must be satisfied to execute the action
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="GOAP Action")
-	FGOAPState PreConditions;
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="GOAP Action")
+	FGOAPState PreConditions_Internal;
 	// Agent State values that will be applied upon succesful execution
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
+	FGOAPState Effects_Internal;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
-	FGOAPState Effects;
+	FGOAPStateUI PreConditions;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
+	FGOAPStateUI Effects;
 
 	// Type of actor which is the target of the this action (if any)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")

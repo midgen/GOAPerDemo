@@ -31,6 +31,11 @@ TSharedRef<SWidget>	SGOAPAtomPin::GetDefaultValueWidget()
 	else {
 		Key = 0;
 	}
+	// Make sure if we've changed options we don't go out of bounds
+	if (Key >= AvailableOptions.Num())
+	{
+		Key = 0;
+	}
 
 	//Creating the button that adds a new item on the list when pressed
 	return SNew(SHorizontalBox)
