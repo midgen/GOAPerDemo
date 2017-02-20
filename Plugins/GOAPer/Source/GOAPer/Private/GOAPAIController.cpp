@@ -20,6 +20,11 @@ bool AGOAPAIController::LoadGOAPDefaults()
 		GOAPActions.Add(NewObject<UGOAPAction>(this, elem));
 	}
 
+	for (auto& action : GOAPActions)
+	{
+		action->SetupDefaults();
+	}
+
 	// Load default state
 	for (FGOAPAtom& state : StartingState.State)
 	{

@@ -6,15 +6,7 @@
 
 UGOAPAction::UGOAPAction(class FObjectInitializer const & ObjectInitializer) : Super(ObjectInitializer)
 {
-	for (FGOAPAtom& pre : PreConditions.State)
-	{
-		PreConditions_Internal.SetState(pre.Key, pre.Value);
-	}
 
-	for (FGOAPAtom& pre : Effects.State)
-	{
-		Effects_Internal.SetState(pre.Key, pre.Value);
-	}
 }
 
 bool UGOAPAction::ArePreconditionsSatisfied(AGOAPAIController* controller)
@@ -37,4 +29,17 @@ bool UGOAPAction::IsInRange(AGOAPAIController* controller)
 bool UGOAPAction::AreEffectsSatisfied(AGOAPAIController* controller)
 {
 	 return controller->GOAPState.IsSatisfiesState(Effects_Internal);
+}
+
+void UGOAPAction::SetupDefaults()
+{
+	for (FGOAPAtom& pre : PreConditions.State)
+	{
+		PreConditions_Internal.SetState(pre.Key, pre.Value);
+	}
+
+	for (FGOAPAtom& pre : Effects.State)
+	{
+		Effects_Internal.SetState(pre.Key, pre.Value);
+	}
 }

@@ -57,6 +57,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	bool ShouldInterruptMoveOnTargetAcquisition = false;
+
+	void SetupDefaults();
 	
 	uint8 Cost;
 };
