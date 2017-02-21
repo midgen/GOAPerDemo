@@ -65,11 +65,15 @@ public:
 	// Switch FSM State
 	void SetNewState(TSharedPtr<GOAPFSMState> newState);
 	// Helper functions for switching state
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetDoActionState();
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetIdleState();
 	// Helpers for changing to MoveToStates
-	void SetMoveToStateWithTarget(TWeakObjectPtr<AActor> aTargetActor, float aAcceptanceRadius);
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	void SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius);
 	// Move to a location, sets movetotarget to current character
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetMoveToStateWithLocation(FVector aLocation);
 
 	// DWISOTT - Commonly used when perception stimulus causes us to need to replan

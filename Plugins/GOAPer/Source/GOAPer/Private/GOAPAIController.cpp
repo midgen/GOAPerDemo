@@ -89,9 +89,9 @@ void AGOAPAIController::ClearCurrentActionAndPlan()
 	SetIdleState();
 }
 
-void AGOAPAIController::SetMoveToStateWithTarget(TWeakObjectPtr<AActor> aTargetActor, float aAcceptanceRadius)
+void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius)
 {
-	if (!aTargetActor.IsValid())
+	if (!aTargetActor)
 	{
 		return;
 	}
@@ -104,14 +104,24 @@ void AGOAPAIController::SetMoveToStateWithTarget(TWeakObjectPtr<AActor> aTargetA
 		true, 5.0f, 0,
 		12.333
 		);
-	AActor* target = aTargetActor.Get(true);
-	MoveToActor(target, aAcceptanceRadius);
+	//AActor* target = aTargetActor.Get(true);
+	MoveToActor(aTargetActor, aAcceptanceRadius);
 	MoveToTargetActor = aTargetActor;
 	SetNewState(MakeShareable(new MoveToState()));
 }
 
 void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation)
 {
+	DrawDebugLine(
+		GetWorld(),
+		GetPawn()->GetActorLocation(),
+		aLocation,
+		FColor(0, 0, 255),
+		true, 5.0f, 0,
+		12.333
+		);
+	// Set to self to avoid failing null checks
+	MoveToTargetActor = GetCharacter();
 	SetNewState(MakeShareable(new MoveToState()));
 	MoveToLocation(aLocation, -1.0f);
 }
