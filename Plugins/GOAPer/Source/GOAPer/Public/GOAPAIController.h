@@ -99,6 +99,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetGOAPState(FGOAPAtomKey Key, bool Value);
 
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	FVector GetRandomPointInNavigableRadius();
+
+
 	TWeakObjectPtr<AActor> MoveToTargetActor;
 
 };
