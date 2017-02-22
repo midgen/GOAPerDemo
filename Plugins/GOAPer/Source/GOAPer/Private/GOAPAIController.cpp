@@ -187,16 +187,6 @@ void AGOAPAIController::SetGOAPState(FGOAPAtomKey Key, bool Value)
 	GOAPState.SetState(Key.Key, Value);
 }
 
-FVector AGOAPAIController::GetRandomPointInNavigableRadius()
-{
-	UNavigationSystem* _navSys = UNavigationSystem::GetCurrent(GetWorld());
-	FNavLocation Result;
-	_navSys->GetRandomPointInNavigableRadius(GetCharacter()->GetActorLocation(), 5000.0f, Result);
-	return Result.Location;
-}
-
-
-
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)
 {
 	TArray<UGOAPAction*> result;

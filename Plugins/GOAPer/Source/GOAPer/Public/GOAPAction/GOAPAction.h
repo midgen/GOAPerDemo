@@ -8,7 +8,7 @@
 
 class AGOAPAIController;
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, meta = (ShowWorldContextPin))
 class GOAPER_API UGOAPAction : public UObject
 {
 	GENERATED_BODY()
@@ -35,12 +35,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FString ActionDescription;
 
-	// TODO: Both these should be sets/maps
-	// Agent State values that must be satisfied to execute the action
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="GOAP Action")
 	FGOAPState PreConditions_Internal;
-	// Agent State values that will be applied upon succesful execution
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FGOAPState Effects_Internal;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
