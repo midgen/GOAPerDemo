@@ -187,6 +187,18 @@ void AGOAPAIController::SetGOAPState(FGOAPAtomKey Key, bool Value)
 	GOAPState.SetState(Key.Key, Value);
 }
 
+bool AGOAPAIController::GetGOAPState(FGOAPAtomKey Key)
+{
+	if (GOAPState.State.Contains(Key.Key))
+	{
+		return *GOAPState.State.Find(Key.Key);
+	}
+	else {
+		// This is not ideal, but will do for now
+		return false;
+	}
+}
+
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)
 {
 	TArray<UGOAPAction*> result;

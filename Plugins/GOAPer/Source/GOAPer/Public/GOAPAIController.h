@@ -98,6 +98,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetGOAPState(FGOAPAtomKey Key, bool Value);
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	bool GetGOAPState(FGOAPAtomKey Key);
+
 
 	TWeakObjectPtr<AActor> MoveToTargetActor;
 
