@@ -24,7 +24,7 @@ TSharedPtr<GOAPFSMState> DoActionState::Tick(AGOAPAIController& controller, floa
 		return MakeShareable(new IdleState());
 	}
 	// Otherwise, crack on with it
-	if (controller.CurrentAction->Execute(&controller))
+	if (controller.CurrentAction->Execute(&controller, DeltaTime))
 	{
 		// And clear the action
 		controller.CurrentAction = nullptr;

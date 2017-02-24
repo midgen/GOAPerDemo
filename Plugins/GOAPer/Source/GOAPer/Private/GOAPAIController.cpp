@@ -89,7 +89,7 @@ void AGOAPAIController::ClearCurrentActionAndPlan()
 	SetIdleState();
 }
 
-void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius)
+void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed)
 {
 	if (!aTargetActor)
 	{
@@ -105,12 +105,14 @@ void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAc
 		12.333
 		);
 	//AActor* target = aTargetActor.Get(true);
+
+	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	MoveToActor(aTargetActor, aAcceptanceRadius);
 	MoveToTargetActor = aTargetActor;
 	SetNewState(MakeShareable(new MoveToState()));
 }
 
-void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation)
+void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed)
 {
 	DrawDebugLine(
 		GetWorld(),
@@ -122,6 +124,7 @@ void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation)
 		);
 	// Set to self to avoid failing null checks
 	MoveToTargetActor = GetCharacter();
+	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	SetNewState(MakeShareable(new MoveToState()));
 	MoveToLocation(aLocation, -1.0f);
 }
@@ -197,6 +200,13 @@ bool AGOAPAIController::GetGOAPState(FGOAPAtomKey Key)
 		// This is not ideal, but will do for now
 		return false;
 	}
+}
+
+void AGOAPAIController::SetGOAPGoal(FGOAPAtomKey Key, bool Value)
+{
+	CurrentGoal.Key = Key.Key;
+	CurrentGoal.Value = Value;
+	ClearCurrentActionAndPlan();
 }
 
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)

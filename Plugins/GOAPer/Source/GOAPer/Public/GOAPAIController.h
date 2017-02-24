@@ -71,10 +71,10 @@ public:
 	void SetIdleState();
 	// Helpers for changing to MoveToStates
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius);
+	void SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed);
 	// Move to a location, sets movetotarget to current character
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetMoveToStateWithLocation(FVector aLocation);
+	void SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed);
 
 	// DWISOTT - Commonly used when perception stimulus causes us to need to replan
 	void ClearCurrentActionAndPlan();
@@ -100,6 +100,9 @@ public:
 	void SetGOAPState(FGOAPAtomKey Key, bool Value);
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool GetGOAPState(FGOAPAtomKey Key);
+
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	void SetGOAPGoal(FGOAPAtomKey Key, bool Value);
 
 
 	TWeakObjectPtr<AActor> MoveToTargetActor;

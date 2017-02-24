@@ -29,8 +29,8 @@ public:
 
 	// Called each frame while this is the active action, returns true when complete
 	UFUNCTION(BlueprintNativeEvent, Category = "GOAP Action")
-	bool Execute(AGOAPAIController* controller);
-	virtual bool Execute_Implementation(AGOAPAIController* controller) { return false;};
+	bool Execute(AGOAPAIController* controller, float DeltaSeconds);
+	virtual bool Execute_Implementation(AGOAPAIController* controller, float DeltaSeconds) { return false;};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FString ActionDescription;
