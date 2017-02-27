@@ -104,7 +104,6 @@ void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAc
 		true, 5.0f, 0,
 		12.333
 		);
-	//AActor* target = aTargetActor.Get(true);
 
 	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	MoveToActor(aTargetActor, aAcceptanceRadius);
@@ -207,6 +206,16 @@ void AGOAPAIController::SetGOAPGoal(FGOAPAtomKey Key, bool Value)
 	CurrentGoal.Key = Key.Key;
 	CurrentGoal.Value = Value;
 	ClearCurrentActionAndPlan();
+}
+
+bool AGOAPAIController::IsGoalSet(FGOAPAtomKey Key, bool Value)
+{
+	if (CurrentGoal.Key == Key.Key && CurrentGoal.Value == Value)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)

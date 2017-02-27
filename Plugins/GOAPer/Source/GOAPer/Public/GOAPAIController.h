@@ -23,14 +23,8 @@ private:
 	UPROPERTY()
 	UGOAPPlanner* Planner;
 
-protected:
-
-
 public:
 
-	// Flag to indicate we've set a new goal and are waiting for the idle state
-	// To trigger a new plan. Set to true once we start a DoAction state
-	bool IsIdlePendingPlan = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
 
@@ -39,6 +33,7 @@ public:
 	// The current active Plan
 	TQueue<TWeakObjectPtr<UGOAPAction>>	ActionQueue;
 	// Current active action
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	TWeakObjectPtr<UGOAPAction>			CurrentAction;
 	// Current goal
 	FGOAPAtom CurrentGoal;
@@ -48,24 +43,24 @@ public:
 	UPROPERTY()
 	TArray<UGOAPAction*>	GOAPActions;
 
+	/** GOAP actions that will be available to this agent **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	TArray<TSubclassOf<UGOAPAction>> AvailableActions;
+	/** Default starting state of the agent **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	FGOAPStateUI StartingState;
-
+	/** Default starting goal of the agent **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	FGOAPAtom DefaultGoal;
-	
-
-
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+	/*** FSM SECTION *************/
 	// Switch FSM State
 	void SetNewState(TSharedPtr<GOAPFSMState> newState);
 	// Helper functions for switching state
-	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	//UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetDoActionState();
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetIdleState();
@@ -76,14 +71,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed);
 
+	/*** Planner-related function ***/
 	// DWISOTT - Commonly used when perception stimulus causes us to need to replan
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void ClearCurrentActionAndPlan();
 	// Activate the Planner for the current goal
 	bool BuildActionPlanForCurrentGoal();
-
+	// Helper function for the planner, fetch the valid actions for a given state
 	TArray<UGOAPAction*> GetValidActionsForState(const FGOAPState aState);
-
+	// Helper to check if a given state is satisfied by the current agent state
 	bool isStateSatisfied(FGOAPAtom aState);
+	// Helper to check if a given state is satisfied by the current agent state
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool isStateSatisfied(FGOAPAtomKey Key, const bool Value);
 
@@ -95,16 +93,19 @@ public:
 	FString GetCurrentFSMStateString();
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	FString GetCurrentActionString();
-
+	/** Sets the state of a single atom, creates the entry if it doesn't already exist **/
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetGOAPState(FGOAPAtomKey Key, bool Value);
+	/** Gets the state of a single atom **/
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool GetGOAPState(FGOAPAtomKey Key);
-
+	/** Set the current active goal **/
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetGOAPGoal(FGOAPAtomKey Key, bool Value);
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	bool IsGoalSet(FGOAPAtomKey Key, bool Value);
 
-
+	// Weak pointer to MoveToTarget, used when moving to an actor to abort if the target is destroyed
 	TWeakObjectPtr<AActor> MoveToTargetActor;
 
 };
