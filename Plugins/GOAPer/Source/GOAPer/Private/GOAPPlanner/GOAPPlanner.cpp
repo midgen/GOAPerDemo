@@ -56,6 +56,13 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 			}
 		}
 
+		if (ClosedNodes.Num() >= 499)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Planning fail, circular routes?"));
+			return GOAPPlan;
+
+		}
+
 	}
 
 	TArray<FGOAPNode*> ValidNodes;
@@ -112,7 +119,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Planning complete, nodes: " + FString::FromInt(ClosedNodes.Num()) + 
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Planning complete, nodes: " + FString::FromInt(ClosedNodes.Num()) + 
 											", valid plans: " + FString::FromInt(ValidPlans.Num()) +
 											", optimal plan Cost: " + FString::FromInt(shortestPlan)));
 
