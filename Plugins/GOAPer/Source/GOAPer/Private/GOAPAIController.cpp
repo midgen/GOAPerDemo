@@ -101,7 +101,7 @@ void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAc
 		GetPawn()->GetActorLocation(),
 		aTargetActor->GetActorLocation(),
 		FColor(0, 0, 255),
-		true, 5.0f, 0,
+		true, 1.0f, 0,
 		12.333
 		);
 
@@ -117,8 +117,8 @@ void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation, float Walk
 		GetWorld(),
 		GetPawn()->GetActorLocation(),
 		aLocation,
-		FColor(0, 0, 255),
-		true, 5.0f, 0,
+		FColor(0, 255, 0),
+		true, 1.0f, 0,
 		12.333
 		);
 	// Set to self to avoid failing null checks
