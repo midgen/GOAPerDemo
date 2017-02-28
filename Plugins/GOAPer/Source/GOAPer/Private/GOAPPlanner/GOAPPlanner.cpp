@@ -20,6 +20,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 	
 	OpenNodes.Empty();
 	ClosedNodes.Empty(0);
+	// TODO: Gotta change something here, diff container?
 	ClosedNodes.Reserve(500);
 	GOAPPlan.Empty();
 
@@ -83,15 +84,21 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 		ValidPlans.Push(CandidatePlan);
 	}
 
-	// Now pick one, least number of actions will do for now
+	// Now pick the plan with the lowest cost
 	int32 shortestPlan = INT_MAX;
 	int16 index = 0;
 	int16 shortPlanIndex = -1;
 	for (auto& plan : ValidPlans)
 	{
-		if (plan.Num() < shortestPlan)
+		int32 thisPlanCost = 0;
+		for (auto& planAction : plan)
 		{
-			shortestPlan = plan.Num();
+			thisPlanCost += planAction->Cost;
+		}
+
+		if (thisPlanCost < shortestPlan)
+		{
+			shortestPlan = thisPlanCost;
 			shortPlanIndex = index;
 		}
 		++index;
@@ -107,7 +114,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Planning complete, nodes: " + FString::FromInt(ClosedNodes.Num()) + 
 											", valid plans: " + FString::FromInt(ValidPlans.Num()) +
-											", optimal length: " + FString::FromInt(GOAPPlan.Num())));
+											", optimal plan Cost: " + FString::FromInt(shortestPlan)));
 
 	return GOAPPlan;
 }

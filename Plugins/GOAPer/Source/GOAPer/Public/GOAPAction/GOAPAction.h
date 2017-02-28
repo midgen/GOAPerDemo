@@ -54,6 +54,8 @@ public:
 	bool ShouldInterruptMoveOnTargetAcquisition = false;
 
 	void SetupDefaults();
-	
-	uint8 Cost;
+
+	// Cost of the action, used for calculating optimal plan
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
+	int32 Cost;
 };
