@@ -15,13 +15,12 @@ UGOAPPlanner::UGOAPPlanner(const FObjectInitializer &ObjectInitializer) :Super(O
 /**
 /*  Form a plan to satisfy the specified target state					
 **/
-TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const uint8 aState, const bool aValue, TArray<UGOAPAction*>* aActions, FGOAPState* aCurrentState, AGOAPAIController& controller)
+TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aMaxNodes, const uint8 aState, const bool aValue, TArray<UGOAPAction*>* aActions, FGOAPState* aCurrentState, AGOAPAIController& controller)
 {
 	
 	OpenNodes.Empty();
-	ClosedNodes.Empty(0);
-	// TODO: Gotta change something here, diff container?
-	ClosedNodes.Reserve(500);
+	ClosedNodes.Empty(0);	
+	ClosedNodes.Reserve(aMaxNodes);
 	GOAPPlan.Empty();
 
 	// First build the graph, start building from current state
@@ -56,7 +55,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const ui
 			}
 		}
 
-		if (ClosedNodes.Num() >= 499)
+		if (ClosedNodes.Num() >= aMaxNodes)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Planning fail, circular routes?"));
 			return GOAPPlan;

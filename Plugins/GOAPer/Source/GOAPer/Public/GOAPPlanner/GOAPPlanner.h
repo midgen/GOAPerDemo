@@ -22,7 +22,7 @@ class GOAPER_API UGOAPPlanner : public UObject
 	TArray<TWeakObjectPtr<UGOAPAction>> GOAPPlan;
 public:
 
-	TArray<TWeakObjectPtr<UGOAPAction>> Plan(UObject* aOuter, const uint8 aState,
+	TArray<TWeakObjectPtr<UGOAPAction>> Plan(UObject* aOuter, int32 aMaxNodes, const uint8 aState,
 		const bool aValue,
 		TArray<UGOAPAction*>* aActions,
 		FGOAPState* aCurrentState,

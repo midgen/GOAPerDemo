@@ -152,7 +152,7 @@ bool AGOAPAIController::BuildActionPlanForCurrentGoal()
 	}
 
 	// Make a plan!
-	planActions = Planner->Plan(this, targetState.Key, targetState.Value, &GOAPActions, &GOAPState, *this);
+	planActions = Planner->Plan(this, MaxGraphNodes, targetState.Key, targetState.Value, &GOAPActions, &GOAPState, *this);
 
 	// If we find one, push it into the Action Queue
 	if (planActions.Num() > 0)

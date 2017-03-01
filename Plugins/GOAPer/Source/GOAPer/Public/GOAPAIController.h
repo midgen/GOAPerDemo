@@ -52,6 +52,9 @@ public:
 	/** Default starting goal of the agent **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
 	FGOAPAtom DefaultGoal;
+	/** Maximum number of nodes in the planning graph, prevents crash if graph gets stuck in a loop */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	int32 MaxGraphNodes = 256;
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -104,6 +107,8 @@ public:
 	void SetGOAPGoal(FGOAPAtomKey Key, bool Value);
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool IsGoalSet(FGOAPAtomKey Key, bool Value);
+
+
 
 	// Weak pointer to MoveToTarget, used when moving to an actor to abort if the target is destroyed
 	TWeakObjectPtr<AActor> MoveToTargetActor;
