@@ -24,12 +24,17 @@ TSharedPtr<GOAPFSMState> DoActionState::Tick(AGOAPAIController& controller, floa
 		return MakeShareable(new IdleState());
 	}
 	// Otherwise, crack on with it
-	if (controller.CurrentAction->Execute(&controller, DeltaTime))
+	controller.CurrentAction->TimeSinceLastTick += DeltaTime;
+	if (controller.CurrentAction->TimeSinceLastTick > controller.CurrentAction->TickRate)
 	{
-		// And clear the action
-		controller.CurrentAction = nullptr;
-		// Then return to idle
-		return MakeShareable(new IdleState());
+		controller.CurrentAction->TimeSinceLastTick = 0.0f;
+		if (controller.CurrentAction->Execute(&controller, DeltaTime))
+		{
+			// And clear the action
+			controller.CurrentAction = nullptr;
+			// Then return to idle
+			return MakeShareable(new IdleState());
+		}
 	}
 	return nullptr;
 }

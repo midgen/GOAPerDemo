@@ -55,6 +55,16 @@ void AGOAPAIController::Tick(float DeltaTime)
 	{
 		SetNewState(_possibleNewState);
 	}
+	// Check for action cost update ticks
+	for (auto& action : GOAPActions)
+	{
+		action->TimeSinceLastCostUpdate += DeltaTime;
+		if (action->TimeSinceLastCostUpdate > action->CostUpdateRate)
+		{
+			action->TimeSinceLastCostUpdate = 0;
+			action->UpdateCost(this);
+		}
+	}
 }
 
 void AGOAPAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)

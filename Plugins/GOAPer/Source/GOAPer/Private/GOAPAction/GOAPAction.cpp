@@ -31,6 +31,7 @@ bool UGOAPAction::AreEffectsSatisfied(AGOAPAIController* controller)
 	 return controller->GOAPState.IsSatisfiesState(Effects_Internal);
 }
 
+
 void UGOAPAction::SetupDefaults()
 {
 	for (FGOAPAtom& pre : PreConditions.State)
