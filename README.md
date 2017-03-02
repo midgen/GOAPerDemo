@@ -5,7 +5,9 @@ A simple STRIPS-like Goal Oriented Action Planning Framework for UE4
 C++ plugin designed to be used in Blueprints (although can be used in C++). Includes editor customisations and per-project state configuration.
 
 Based on:
+
 http://alumni.media.mit.edu/~jorkin/goap.html
+
 https://en.wikipedia.org/wiki/STRIPS
 
 Instructions (assuming a new project, not the demo included)
