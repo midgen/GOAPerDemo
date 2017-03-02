@@ -10,6 +10,8 @@ http://alumni.media.mit.edu/~jorkin/goap.html
 
 https://en.wikipedia.org/wiki/STRIPS
 
+Includes a sample project with a (very) basic shooter agent. Otherwise follow the intructions for install and use.
+
 ##Instructions 
 
 1. Install the GOAPer Plugin
