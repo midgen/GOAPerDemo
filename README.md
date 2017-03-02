@@ -10,7 +10,7 @@ http://alumni.media.mit.edu/~jorkin/goap.html
 
 https://en.wikipedia.org/wiki/STRIPS
 
-Instructions (assuming a new project, not the demo included)
+##Instructions 
 
 1. Install the GOAPer Plugin
 2. Create a project
