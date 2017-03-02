@@ -4,9 +4,6 @@
 #include "GOAPAIController.h"
 #include "EngineUtils.h"
 #include "Engine.h"
-#include "IdleState.h"
-#include "MoveToState.h"
-#include "DoActionState.h"
 #include "GOAPPlanner.h"
 
 
@@ -42,19 +39,67 @@ void AGOAPAIController::BeginPlay()
 
 	LoadGOAPDefaults();
 
-	SetNewState(MakeShareable(new IdleState()));
+	//SetNewState(MakeShareable(new IdleState()));
 }
 
 void AGOAPAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Run the FSM
-	TSharedPtr<GOAPFSMState> _possibleNewState = FSMstate->Tick(*this, DeltaTime);
-	if (_possibleNewState.IsValid())
+	// If we don't have a current action waiting....
+	if (CurrentAction == nullptr)
 	{
-		SetNewState(_possibleNewState);
+		// If there's nothing queued, we need to try and form a plan
+		if (ActionQueue.IsEmpty())
+		{
+			// If we can form a plan
+			if (BuildActionPlanForCurrentGoal())
+			{
+				// If the goal is already satisfied, trash the queue, we'll try another one next tick
+				if (isStateSatisfied(CurrentGoal))
+				{
+					ActionQueue.Empty();
+					return;
+				}
+				// Select the head action
+				ActionQueue.Dequeue(CurrentAction);
+			}
+		}
+		else // otherwise pop the next action off the queue
+		{
+			ActionQueue.Dequeue(CurrentAction);
+		}
 	}
+	if (CurrentAction->IsValidLowLevel()) // Should have an action by now, check anyway
+	{
+		// If preconditions for current action aren't met, the plan is invalid, clear it
+		if (!CurrentAction->ArePreconditionsSatisfied(this))
+		{
+			CurrentAction = nullptr;
+			ActionQueue.Empty();
+		}
+		// If effects are satisfied, just complete the action without clearing plan
+		else if (CurrentAction->AreEffectsSatisfied(this))
+		{
+			CurrentAction = nullptr;
+		}
+		else
+		{
+			// Otherwise, crack on with it
+			CurrentAction->TimeSinceLastTick += DeltaTime;
+			if (CurrentAction->TimeSinceLastTick > CurrentAction->TickRate)
+			{
+				CurrentAction->TimeSinceLastTick = 0.0f;
+				// Run the action, if it returns true, it's complete,
+				if (CurrentAction->Execute(this, DeltaTime))
+				{
+					// And clear the action so the next will be popped from the queue on next tick
+					CurrentAction = nullptr;
+				}
+			}
+		}
+	}
+
 	// Check for action cost update ticks
 	for (auto& action : GOAPActions)
 	{
@@ -70,33 +115,16 @@ void AGOAPAIController::Tick(float DeltaTime)
 void AGOAPAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
 	Super::OnMoveCompleted(RequestID, Result);
-	
-	SetNewState(MakeShareable(new IdleState()));
+	_IsMoveCompleted = true;
 }
 
-void AGOAPAIController::SetNewState(TSharedPtr<GOAPFSMState> newState)
-{
-	FSMstate.Reset();
-	FSMstate = newState;
-	FSMstate->Enter(*this);
-}
 
-void AGOAPAIController::SetDoActionState()
-{
-	SetNewState(MakeShareable(new DoActionState()));
-}
-
-void AGOAPAIController::SetIdleState()
-{
-	SetNewState(MakeShareable(new IdleState()));
-}
 
 void AGOAPAIController::ClearCurrentActionAndPlan()
 {
 	// clearing the action and queue will cause IdleState to form a new plan
 	CurrentAction = nullptr;
 	ActionQueue.Empty();
-	SetIdleState();
 }
 
 void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed)
@@ -118,7 +146,7 @@ void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAc
 	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	MoveToActor(aTargetActor, aAcceptanceRadius);
 	MoveToTargetActor = aTargetActor;
-	SetNewState(MakeShareable(new MoveToState()));
+	_IsMoveCompleted = false;
 }
 
 void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed)
@@ -133,9 +161,9 @@ void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation, float Walk
 		);
 	// Set to self to avoid failing null checks
 	MoveToTargetActor = GetCharacter();
-	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-	SetNewState(MakeShareable(new MoveToState()));
+	GetCharacter()->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;	
 	MoveToLocation(aLocation, -1.0f);
+	_IsMoveCompleted = false;
 }
 
 bool AGOAPAIController::BuildActionPlanForCurrentGoal()
@@ -170,15 +198,6 @@ bool AGOAPAIController::BuildActionPlanForCurrentGoal()
 	return true;
 }
 
-
-FString AGOAPAIController::GetCurrentFSMStateString()
-{
-	if (FSMstate.IsValid())
-	{
-		return FSMstate->ToString();
-	}
-	return TEXT("No Valid State");
-}
 
 FString AGOAPAIController::GetCurrentActionString()
 {

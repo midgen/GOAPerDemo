@@ -5,7 +5,6 @@
 #include "GOAPer.h"
 #include "AIController.h"
 #include "GOAPerSettings.h"
-#include "GOAPFSMState.h"
 #include "GOAPAction.h"
 #include "GOAPState.h"
 #include "GOAPStateUI.h"
@@ -22,18 +21,17 @@ private:
 	bool LoadGOAPDefaults();
 	UPROPERTY()
 	UGOAPPlanner* Planner;
+	bool _IsMoveCompleted = true;
 
 public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UGOAPerSettings* Settings = GetMutableDefault<UGOAPerSettings>();
 
-	// Current FSM States
-	TSharedPtr<GOAPFSMState> FSMstate;
 	// The current active Plan
 	TQueue<TWeakObjectPtr<UGOAPAction>>	ActionQueue;
 	// Current active action
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAPer")
 	TWeakObjectPtr<UGOAPAction>			CurrentAction;
 	// Current goal
 	FGOAPAtom CurrentGoal;
@@ -44,35 +42,29 @@ public:
 	TArray<UGOAPAction*>	GOAPActions;
 
 	/** GOAP actions that will be available to this agent **/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer")
 	TArray<TSubclassOf<UGOAPAction>> AvailableActions;
 	/** Default starting state of the agent **/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer")
 	FGOAPStateUI StartingState;
 	/** Default starting goal of the agent **/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer")
 	FGOAPAtom DefaultGoal;
 	/** Maximum number of nodes in the planning graph, prevents crash if graph gets stuck in a loop */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer | Agent Config")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer")
 	int32 MaxGraphNodes = 256;
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-	/*** FSM SECTION *************/
-	// Switch FSM State
-	void SetNewState(TSharedPtr<GOAPFSMState> newState);
-	// Helper functions for switching state
-	//UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetDoActionState();
-	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetIdleState();
 	// Helpers for changing to MoveToStates
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed);
 	// Move to a location, sets movetotarget to current character
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	void SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed);
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	bool IsMoveCompleted() { return _IsMoveCompleted; }
 
 	/*** Planner-related function ***/
 	// DWISOTT - Commonly used when perception stimulus causes us to need to replan
@@ -91,9 +83,6 @@ public:
 	// Callback for MoveTo completion
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
 
-	// Helper functions for debug UI
-	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	FString GetCurrentFSMStateString();
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	FString GetCurrentActionString();
 	/** Sets the state of a single atom, creates the entry if it doesn't already exist **/
@@ -107,8 +96,6 @@ public:
 	void SetGOAPGoal(FGOAPAtomKey Key, bool Value);
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool IsGoalSet(FGOAPAtomKey Key, bool Value);
-
-
 
 	// Weak pointer to MoveToTarget, used when moving to an actor to abort if the target is destroyed
 	TWeakObjectPtr<AActor> MoveToTargetActor;
