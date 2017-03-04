@@ -110,6 +110,18 @@ void AGOAPAIController::Tick(float DeltaTime)
 			action->UpdateCost(this);
 		}
 	}
+
+	// Process EQS Jobs
+	// If we don't have an active job
+	if (!EQSCurrentJob.CallingAction.IsValid())
+	{
+		// See if we have any waiting
+		if (EQSJobs.Dequeue(EQSCurrentJob))
+		{
+			EQSRequest = FEnvQueryRequest(EQSCurrentJob.Query, this);
+			EQSRequest.Execute(EQSCurrentJob.RunMode, this, &AGOAPAIController::EQSQueryFinished);
+		}
+	}
 }
 
 void AGOAPAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
@@ -245,6 +257,39 @@ bool AGOAPAIController::IsGoalSet(FGOAPAtomKey Key, bool Value)
 	}
 
 	return false;
+}
+
+void AGOAPAIController::AddEQSJob(UGOAPAction* CallingAction, UEnvQuery* Query, TEnumAsByte<EEnvQueryRunMode::Type> RunMode)
+{
+	FGOAPEQSJob job;
+	job.CallingAction = CallingAction;
+	job.Query = Query;
+	job.RunMode = RunMode;
+	EQSJobs.Enqueue(job);
+}
+
+void AGOAPAIController::EQSQueryFinished(TSharedPtr<FEnvQueryResult> Result)
+{
+	if (EQSCurrentJob.CallingAction->IsValidLowLevel())
+	{
+		EQSCurrentJob.CallingAction->QueryResultsActor.Empty();
+		EQSCurrentJob.CallingAction->QueryResultsLocation.Empty();
+		if (EQSCurrentJob.RunMode == EEnvQueryRunMode::SingleResult)
+		{
+			EQSCurrentJob.CallingAction->QueryResultsActor.Add(Result->GetItemAsActor(0));
+			EQSCurrentJob.CallingAction->QueryResultsLocation.Add(Result->GetItemAsLocation(0));
+		}
+		else
+		{
+			Result->GetAllAsActors(EQSCurrentJob.CallingAction->QueryResultsActor);
+			Result->GetAllAsLocations(EQSCurrentJob.CallingAction->QueryResultsLocation);
+		}
+
+		EQSCurrentJob.CallingAction->IsEQSResultsAvailable = true;
+		EQSCurrentJob.CallingAction = nullptr;
+		EQSRequest = nullptr;
+	}
+
 }
 
 TArray<UGOAPAction*> AGOAPAIController::GetValidActionsForState(const FGOAPState aState)

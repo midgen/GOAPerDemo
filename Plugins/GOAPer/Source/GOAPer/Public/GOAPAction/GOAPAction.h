@@ -71,6 +71,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FGOAPStateUI Effects;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
+	bool IsEQSQueryRequestPending;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
+	bool IsEQSResultsAvailable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GOAP Action")
+	TArray<AActor*> QueryResultsActor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GOAP Action")
+	TArray<FVector> QueryResultsLocation;
 
 
 	void SetupDefaults();

@@ -10,6 +10,8 @@
 #include "GOAPStateUI.h"
 #include "GOAPPlanner.h"
 #include "GOAPAtomKey.h"
+#include "GOAPEQSJob.h"
+#include "EnvironmentQuery/EnvQueryManager.h"
 #include "GameFramework/Actor.h"
 #include "GOAPAIController.generated.h"
 
@@ -40,6 +42,12 @@ public:
 	// Available actions for this agent
 	UPROPERTY()
 	TArray<UGOAPAction*>	GOAPActions;
+	// Queue for managing EQS requests from actions
+	
+	TQueue<FGOAPEQSJob, EQueueMode::Mpsc>		EQSJobs;
+	FGOAPEQSJob EQSCurrentJob;
+	bool HasMadeEQSRequest;
+	FEnvQueryRequest EQSRequest;
 
 	/** GOAP actions that will be available to this agent **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAPer")
@@ -96,6 +104,10 @@ public:
 	void SetGOAPGoal(FGOAPAtomKey Key, bool Value);
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool IsGoalSet(FGOAPAtomKey Key, bool Value);
+
+	UFUNCTION(BlueprintCallable, Category = "GOAP")
+	void AddEQSJob(UGOAPAction* CallingAction, UEnvQuery* Query, TEnumAsByte<EEnvQueryRunMode::Type> RunMode);
+	void EQSQueryFinished(TSharedPtr<FEnvQueryResult> Result);
 
 	// Weak pointer to MoveToTarget, used when moving to an actor to abort if the target is destroyed
 	TWeakObjectPtr<AActor> MoveToTargetActor;
