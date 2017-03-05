@@ -118,7 +118,7 @@ void AGOAPAIController::Tick(float DeltaTime)
 		// See if we have any waiting
 		if (EQSJobs.Dequeue(EQSCurrentJob))
 		{
-			EQSRequest = FEnvQueryRequest(EQSCurrentJob.Query, this);
+			EQSRequest = FEnvQueryRequest(EQSCurrentJob.Query, GetCharacter());
 			EQSRequest.Execute(EQSCurrentJob.RunMode, this, &AGOAPAIController::EQSQueryFinished);
 		}
 	}
