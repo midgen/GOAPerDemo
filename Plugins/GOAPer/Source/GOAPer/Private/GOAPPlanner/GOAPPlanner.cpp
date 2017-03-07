@@ -13,7 +13,8 @@ UGOAPPlanner::UGOAPPlanner(const FObjectInitializer &ObjectInitializer) :Super(O
 
 }
 /**
-/*  Form a plan to satisfy the specified target state					
+/*  Form a plan to satisfy the specified target state
+/   This needs a fairly comprehensive rework soon!
 **/
 TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aMaxNodes, const uint8 aState, const bool aValue, TArray<UGOAPAction*>* aActions, FGOAPState* aCurrentState, AGOAPAIController& controller)
 {
@@ -118,9 +119,17 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aM
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Planning complete, nodes: " + FString::FromInt(ClosedNodes.Num()) + 
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, TEXT("Planning complete, nodes: " + FString::FromInt(ClosedNodes.Num()) + 
 											", valid plans: " + FString::FromInt(ValidPlans.Num()) +
 											", optimal plan Cost: " + FString::FromInt(shortestPlan)));
+
+	FString planString;
+	for (auto& action : GOAPPlan)
+	{
+		planString += action->ActionDescription + TEXT(":");
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Cyan, planString);
 
 	return GOAPPlan;
 }

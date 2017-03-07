@@ -43,4 +43,8 @@ void UGOAPAction::SetupDefaults()
 	{
 		Effects_Internal.SetState(pre.Key, pre.Value);
 	}
+
+	// Add some randomness to the tick rate to avoid evaluating on the same tick
+	TimeSinceLastTick = FMath::FRandRange(0.0f, 1.0f);
+	TimeSinceLastCostUpdate = FMath::FRandRange(0.0f, 1.0f);
 }
