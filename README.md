@@ -12,6 +12,8 @@ https://en.wikipedia.org/wiki/STRIPS
 
 Includes a sample project with a (very) basic shooter agent. Otherwise follow the intructions for install and use.
 
+Using a very crude forward search planning algorithm starting from current state at present. Needs work.
+
 ##Instructions 
 
 1. Install the GOAPer Plugin
@@ -28,3 +30,7 @@ Includes a sample project with a (very) basic shooter agent. Otherwise follow th
   2. Set the Starting State
   3. Set the default Goal
 
+##Todo
+
+1. Add more comprehensive and robust planning algorithms
+2. Continue building out demo project
