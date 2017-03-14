@@ -1,4 +1,5 @@
-#include "Editor/DetailCustomizations/Private/DetailCustomizationsPrivatePCH.h"
+#include "Editor/DetailCustomizations/Public/DetailCustomizations.h"
+#include "Editor/PropertyEditor/Public/IPropertyTypeCustomization.h"
 #include "GOAPState.h"
 #include "GOAPerSettings.h"
 #pragma once

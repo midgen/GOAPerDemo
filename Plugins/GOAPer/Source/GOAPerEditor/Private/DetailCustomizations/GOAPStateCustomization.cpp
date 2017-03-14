@@ -3,6 +3,8 @@
 #include "GOAPState.h"
 #include "STextComboBox.h"
 #include "SCheckBox.h"
+#include "Editor/PropertyEditor/Public/PropertyHandle.h"
+#include "Editor/PropertyEditor/Public/DetailWidgetRow.h"
 #include "IPropertyUtilities.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"
@@ -15,8 +17,6 @@ TSharedRef<IPropertyTypeCustomization> FGOAPStateCustomization::MakeInstance()
 
 void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> inStructPropertyHandle, class FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
-	PropertyUtilities = StructCustomizationUtils.GetPropertyUtilities();
-
 	StructPropertyHandle = inStructPropertyHandle;
 
 	// Get the available options from our settings class

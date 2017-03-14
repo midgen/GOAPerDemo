@@ -2,6 +2,7 @@
 #include "GOAPStateUI.h"
 #include "Pins/GOAPAtomPin.h"
 #include "Pins/GOAPAtomPinFactory.h"
+#include "Editor/PropertyEditor/Public/PropertyEditorModule.h"
 #include "DetailCustomizations/GOAPStateCustomization.h"
 
 
