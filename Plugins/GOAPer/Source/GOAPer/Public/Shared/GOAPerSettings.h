@@ -14,7 +14,6 @@ class GOAPER_API UGOAPerSettings
 
 public:
 
-	/** A test state*/
 	UPROPERTY(config, EditAnywhere, BlueprintReadOnly, Category=State)
 	TArray<FString> AvailableStates;
 

@@ -67,10 +67,10 @@ public:
 
 	// Helpers for changing to MoveToStates
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed);
+	void SetMoveToStateWithTarget(AActor* aTargetActor, const float aAcceptanceRadius, const float WalkSpeed);
 	// Move to a location, sets movetotarget to current character
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
-	void SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed);
+	void SetMoveToStateWithLocation(const FVector aLocation, const float WalkSpeed);
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool IsMoveCompleted() { return _IsMoveCompleted; }
 
@@ -83,7 +83,7 @@ public:
 	// Helper function for the planner, fetch the valid actions for a given state
 	TArray<UGOAPAction*> GetValidActionsForState(const FGOAPState aState);
 	// Helper to check if a given state is satisfied by the current agent state
-	bool isStateSatisfied(FGOAPAtom aState);
+	bool isStateSatisfied(const FGOAPAtom aState);
 	// Helper to check if a given state is satisfied by the current agent state
 	UFUNCTION(BlueprintCallable, Category = "GOAP")
 	bool isStateSatisfied(FGOAPAtomKey Key, const bool Value);

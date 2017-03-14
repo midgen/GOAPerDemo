@@ -3,6 +3,7 @@
 #include "EnvironmentQuery/EnvQuery.h"
 #include "GOAPEQSJob.generated.h"
 
+/** Struct defining an EQS job that actions can send to the controller to process */
 USTRUCT(BlueprintType)
 struct GOAPER_API FGOAPEQSJob
 {
@@ -16,6 +17,4 @@ public:
 
 	UPROPERTY()
 	TEnumAsByte<EEnvQueryRunMode::Type> RunMode;
-
-
 };

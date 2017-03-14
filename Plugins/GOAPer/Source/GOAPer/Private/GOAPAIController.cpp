@@ -139,7 +139,7 @@ void AGOAPAIController::ClearCurrentActionAndPlan()
 	ActionQueue.Empty();
 }
 
-void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAcceptanceRadius, float WalkSpeed)
+void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, const float aAcceptanceRadius, const float WalkSpeed)
 {
 	if (!aTargetActor)
 	{
@@ -161,7 +161,7 @@ void AGOAPAIController::SetMoveToStateWithTarget(AActor* aTargetActor, float aAc
 	_IsMoveCompleted = false;
 }
 
-void AGOAPAIController::SetMoveToStateWithLocation(FVector aLocation, float WalkSpeed)
+void AGOAPAIController::SetMoveToStateWithLocation(const FVector aLocation, const float WalkSpeed)
 {
 	DrawDebugLine(
 		GetWorld(),

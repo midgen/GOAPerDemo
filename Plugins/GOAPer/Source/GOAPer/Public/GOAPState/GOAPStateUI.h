@@ -1,8 +1,9 @@
 #pragma once
-#pragma once
-
+#include "GOAPAtom.h"
 #include "GOAPStateUI.generated.h"
 
+// We have a different struct for configuration purposes
+//  so that we can specify our custom configuration panels
 USTRUCT()
 struct GOAPER_API FGOAPStateUI
 {

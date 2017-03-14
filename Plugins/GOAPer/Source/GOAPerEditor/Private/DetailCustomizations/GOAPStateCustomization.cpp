@@ -3,7 +3,6 @@
 #include "GOAPState.h"
 #include "STextComboBox.h"
 #include "SCheckBox.h"
-#include "../Widgets/GOAPStateWidget.h"
 #include "IPropertyUtilities.h"
 
 #define LOCTEXT_NAMESPACE "GOAPStateCustomization"

@@ -1,6 +1,5 @@
 #pragma once
 #include "GOAPer.h"
-#include "GOAPStateEnum.h"
 #include "GOAPAtom.generated.h"
 
 USTRUCT(BlueprintType)
@@ -8,7 +7,6 @@ struct GOAPER_API FGOAPAtom
 {
 	GENERATED_USTRUCT_BODY()
 public:
-
 	FGOAPAtom(uint8 aKey, bool aValue) : Key(aKey), Value(aValue) {};
 	FGOAPAtom() {};
 	~FGOAPAtom() {};
@@ -21,6 +19,4 @@ public:
 	uint8 Key;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool Value;
-
-
 };

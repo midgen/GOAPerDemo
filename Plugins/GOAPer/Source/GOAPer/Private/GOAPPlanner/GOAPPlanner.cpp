@@ -15,8 +15,9 @@ UGOAPPlanner::UGOAPPlanner(const FObjectInitializer &ObjectInitializer) :Super(O
 /**
 /*  Form a plan to satisfy the specified target state
 /   This needs a fairly comprehensive rework soon!
+/   Uses a very basic forward search from current state at present.
 **/
-TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aMaxNodes, const uint8 aState, const bool aValue, TArray<UGOAPAction*>* aActions, FGOAPState* aCurrentState, AGOAPAIController& controller)
+TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, const int32 aMaxNodes, const uint8 aState, const bool aValue, TArray<UGOAPAction*>* aActions, FGOAPState* aCurrentState, AGOAPAIController& controller)
 {
 	
 	OpenNodes.Empty();
@@ -46,6 +47,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aM
 				// e.g. EnterCover->ExitCover->EnterCover->ExitCover
 				if (!workNode.Parent.Action.IsValid() || !workNode.Parent.Node->Parent.Action.IsValid() || action != workNode.Parent.Node->Parent.Action)
 				{
+					// The new node is the previous state plus the effects of the action that got us here
 					FGOAPNode newNode;
 					newNode.State = workNode.State;
 					newNode.State = newNode.State + action->Effects_Internal;
@@ -58,6 +60,7 @@ TArray<TWeakObjectPtr<UGOAPAction>> UGOAPPlanner::Plan(UObject* aOuter, int32 aM
 
 		if (ClosedNodes.Num() >= aMaxNodes)
 		{
+			// We've run out of nodes, usually because of a circular route
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Planning fail, circular routes?"));
 			return GOAPPlan;
 

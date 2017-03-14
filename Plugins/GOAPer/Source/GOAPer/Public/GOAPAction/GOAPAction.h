@@ -28,14 +28,16 @@ public:
 	bool AreEffectsSatisfied(AGOAPAIController* controller);
 
 	// Called each frame while this is the active action, returns true when complete
+	//   Can/should be overridden in Blueprint
 	UFUNCTION(BlueprintNativeEvent, Category = "GOAP Action")
 	bool Execute(AGOAPAIController* controller, float DeltaSeconds);
 	virtual bool Execute_Implementation(AGOAPAIController* controller, float DeltaSeconds) { return false;};
 
 	// Called each frame while this is the active action, returns true when complete
+	//   Can/should be overridden in Blueprint
 	UFUNCTION(BlueprintNativeEvent, Category = "GOAP Action")
 	void UpdateCost(AGOAPAIController* controller);
-	virtual void UpdateCost_Implementation(AGOAPAIController* controller) {  };
+	virtual void UpdateCost_Implementation(AGOAPAIController* controller) { };
 
 	//Text description of the action for debugging
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
@@ -44,7 +46,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	float TickRate;
 	float TimeSinceLastTick = 0.0f;
-	// Cost of the action, used for calculating optimal plan
+	// Cost of the action, used for planning
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
 	int32 Cost;
 	// Frequency to call the UpdateCost function
@@ -61,27 +63,28 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	bool ShouldInterruptMoveOnTargetAcquisition = false;
 
-
+	// Internal state of the preconditions and effects
 	FGOAPState PreConditions_Internal;
 	FGOAPState Effects_Internal;
-	// State that must be satisfied for this to be a valid action
+	// UI inputs for State that must be satisfied for this to be a valid action
+	//  Values are copied to the _Internal versions on startup
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FGOAPStateUI PreConditions;
 	// State that is applied on successful completion of this action
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GOAP Action")
 	FGOAPStateUI Effects;
 
+	// Helpers for the use of EQS queries
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
 	bool IsEQSQueryRequestPending;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GOAP Action")
 	bool IsEQSResultsAvailable;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GOAP Action")
 	TArray<AActor*> QueryResultsActor;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GOAP Action")
 	TArray<FVector> QueryResultsLocation;
 
-
+	// Configures the action, copying data from UI structs to Internal
 	void SetupDefaults();
 
 
