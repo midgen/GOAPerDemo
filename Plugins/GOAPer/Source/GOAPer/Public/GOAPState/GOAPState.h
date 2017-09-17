@@ -2,7 +2,7 @@
 
 #include "GOAPState.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct GOAPER_API FGOAPState
 {
 	GENERATED_USTRUCT_BODY()
@@ -23,7 +23,7 @@ public:
 		return *this;
 	}
 
-	bool FGOAPState::IsSatisfiesState(const FGOAPState& aOther)
+	bool IsSatisfiesState(const FGOAPState& aOther)
 	{
 		for (auto& elem : aOther.State)
 		{			
@@ -39,7 +39,7 @@ public:
 		return true;
 	}
 
-	bool FGOAPState::IsStateSatisfied(const uint8 aState, const bool aValue)
+	bool IsStateSatisfied(const uint8 aState, const bool aValue)
 	{
 		if (State.Contains(aState))
 		{
@@ -53,7 +53,7 @@ public:
 		return false;
 	}
 
-	void FGOAPState::SetState(const uint8 aState, const bool aValue)
+	void SetState(const uint8 aState, const bool aValue)
 	{
 		State.Add(aState, aValue);
 	}

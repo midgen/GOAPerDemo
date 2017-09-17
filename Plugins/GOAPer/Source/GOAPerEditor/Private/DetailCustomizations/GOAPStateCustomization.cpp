@@ -78,7 +78,7 @@ void FGOAPStateCustomization::CustomizeHeader(TSharedRef<class IPropertyHandle> 
 			[
 				SAssignNew(ValueCheckBox, SCheckBox)
 				.OnCheckStateChanged(this, &FGOAPStateCustomization::OnCheckStateChanged)
-				.IsChecked(Value)
+				.IsChecked((ECheckBoxState)Value)
 			]
 		];
 

@@ -4,7 +4,7 @@
 
 // We have a different struct for configuration purposes
 //  so that we can specify our custom configuration panels
-USTRUCT()
+USTRUCT(BlueprintType)
 struct GOAPER_API FGOAPStateUI
 {
 	GENERATED_USTRUCT_BODY()
