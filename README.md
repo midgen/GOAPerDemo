@@ -1,5 +1,9 @@
 # GOAPer
 
+# This plugin as an incomplete WIP, (attempt) to use at your own risk
+
+It's not been in active development for some time, although I do plan to come back and refactor/clean it up in the near future with a view to building a decent sized test prototype.
+
 A simple STRIPS-like Goal Oriented Action Planning Framework for UE4
 
 This branch is built on UnrealEngine 4.15.0. See branches for previous engine versions.
