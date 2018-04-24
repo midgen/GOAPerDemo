@@ -1,0 +1,3 @@
+[submodule "Plugins/GOAPer"]
+	path = Plugins/GOAPer
+	url = https://github.com/midgen/GOAPer.git
