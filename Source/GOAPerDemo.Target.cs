@@ -5,26 +5,11 @@ using System.Collections.Generic;
 
 public class GOAPerDemoTarget : TargetRules
 {
-	public GOAPerDemoTarget(TargetInfo Target)
+    public GOAPerDemoTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Game;
-	}
+        Type = TargetType.Game;
 
-	//
-	// TargetRules interface.
-	//
+        ExtraModuleNames.AddRange(new string[] { "GOAPerDemo" });
+    }
 
-	public override void SetupBinaries(
-		TargetInfo Target,
-		ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
-		ref List<string> OutExtraModuleNames
-		)
-	{
-		OutExtraModuleNames.AddRange( new string[] { "GOAPerDemo" } );
-		
-		if(UEBuildConfiguration.bBuildEditor)
-		{
-			OutExtraModuleNames.AddRange( new string[] { "GOAPerEditor" } );
-		}
-	}
 }

@@ -5,22 +5,12 @@ using System.Collections.Generic;
 
 public class GOAPerDemoEditorTarget : TargetRules
 {
-	public GOAPerDemoEditorTarget(TargetInfo Target)
+    public GOAPerDemoEditorTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Editor;
-	}
+        Type = TargetType.Editor;
 
-	//
-	// TargetRules interface.
-	//
+        ExtraModuleNames.AddRange(new string[] { "GOAPerDemo" });
+    }
 
-	public override void SetupBinaries(
-		TargetInfo Target,
-		ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
-		ref List<string> OutExtraModuleNames
-		)
-	{
-		OutExtraModuleNames.AddRange( new string[] { "GOAPerDemo" } );
-		OutExtraModuleNames.AddRange( new string[] { "GOAPerEditor" } );
-	}
+
 }
