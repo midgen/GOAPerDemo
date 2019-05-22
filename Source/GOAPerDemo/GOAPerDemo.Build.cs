@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
+using System.IO;
 
 public class GOAPerDemo : ModuleRules
 {
@@ -10,6 +11,6 @@ public class GOAPerDemo : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-
-	}
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    }
 }
